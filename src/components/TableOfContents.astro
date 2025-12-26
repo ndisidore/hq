@@ -1,0 +1,60 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{
+  filteredHeadings.length > 0 && (
+    <nav class="toc sticky top-24">
+      <h2 class="text-lg font-bold mb-4">Table of Contents</h2>
+      <ul class="menu menu-sm bg-base-200 rounded-box w-full">
+        {filteredHeadings.map((heading) => (
+          <li class={heading.depth === 3 ? 'ml-4' : ''}>
+            <a href={`#${heading.slug}`} class="toc-link" data-heading={heading.slug}>
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script>
+  function setupTocHighlight() {
+    const headings = document.querySelectorAll('article h2[id], article h3[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    if (headings.length === 0 || tocLinks.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((link) => link.classList.remove('active'));
+            const activeLink = document.querySelector(
+              `.toc-link[data-heading="${entry.target.id}"]`
+            );
+            activeLink?.classList.add('active');
+          }
+        });
+      },
+      { rootMargin: '-20% 0% -35% 0%', threshold: 0 }
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+  }
+
+  setupTocHighlight();
+  document.addEventListener('astro:after-swap', setupTocHighlight);
+</script>

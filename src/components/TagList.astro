@@ -1,0 +1,29 @@
+---
+interface Props {
+  tags: string[];
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { tags, size = 'md' } = Astro.props;
+
+const sizeClass = {
+  sm: 'badge-sm',
+  md: '',
+  lg: 'badge-lg',
+}[size];
+---
+
+{
+  tags.length > 0 && (
+    <div class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <a
+          href={`/tags/${tag}`}
+          class={`badge badge-outline hover:badge-primary transition-colors ${sizeClass}`}
+        >
+          {tag}
+        </a>
+      ))}
+    </div>
+  )
+}

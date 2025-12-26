@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  prevPost?: CollectionEntry<'blog'> | null;
+  nextPost?: CollectionEntry<'blog'> | null;
+}
+
+const { prevPost, nextPost } = Astro.props;
+---
+
+<nav class="grid grid-cols-1 md:grid-cols-2 gap-4 py-8 border-t border-base-300 mt-8">
+  {
+    prevPost ? (
+      <a
+        href={`/blog/${prevPost.id}/`}
+        class="card bg-base-200 hover:bg-base-300 transition-colors"
+      >
+        <div class="card-body p-4">
+          <span class="text-sm text-base-content/60">Previous Post</span>
+          <span class="font-semibold flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span class="truncate">{prevPost.data.title}</span>
+          </span>
+        </div>
+      </a>
+    ) : (
+      <div />
+    )
+  }
+
+  {
+    nextPost ? (
+      <a
+        href={`/blog/${nextPost.id}/`}
+        class="card bg-base-200 hover:bg-base-300 transition-colors md:text-right"
+      >
+        <div class="card-body p-4">
+          <span class="text-sm text-base-content/60">Next Post</span>
+          <span class="font-semibold flex items-center gap-2 md:flex-row-reverse">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+            <span class="truncate">{nextPost.data.title}</span>
+          </span>
+        </div>
+      </a>
+    ) : (
+      <div />
+    )
+  }
+</nav>

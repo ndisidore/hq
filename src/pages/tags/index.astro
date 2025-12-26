@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { getTagCounts } from '../../utils/tags';
+
+const posts = await getCollection('blog');
+const tagCounts = getTagCounts(posts);
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Tags | ${SITE_TITLE}`} description="Browse all blog post tags" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
+      <h1 class="text-4xl font-bold mb-8">Tags</h1>
+
+      {
+        sortedTags.length > 0 ? (
+          <div class="flex flex-wrap gap-3">
+            {sortedTags.map(([tag, count]) => (
+              <a
+                href={`/tags/${tag}`}
+                class="badge badge-lg badge-outline hover:badge-primary gap-2 transition-colors"
+              >
+                {tag}
+                <span class="badge badge-sm badge-neutral">{count}</span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="text-base-content/70">No tags found. Add tags to your blog posts to see them here.</p>
+        )
+      }
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,49 +1,95 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import TagList from '../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const recentPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 4);
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1">
+      <!-- Hero Section -->
+      <section class="hero min-h-[60vh] bg-base-200">
+        <div class="hero-content text-center">
+          <div class="max-w-2xl">
+            <h1 class="text-5xl font-bold">Hello, I'm [Your Name]</h1>
+            <p class="py-6 text-lg text-base-content/80">
+              A brief introduction about yourself. What you do, what you're passionate about, and
+              what visitors can expect to find on your site.
+            </p>
+            <div class="flex gap-4 justify-center flex-wrap">
+              <a href="/blog" class="btn btn-primary">Read My Blog</a>
+              <a href="/cv" class="btn btn-outline">View My CV</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Posts Section -->
+      <section class="container mx-auto px-4 py-16 max-w-6xl">
+        <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
+          <h2 class="text-3xl font-bold">Recent Posts</h2>
+          <a href="/blog" class="btn btn-ghost">View all posts &rarr;</a>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            recentPosts.map((post, index) => (
+              <article
+                class={`card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow ${index === 0 ? 'md:col-span-2' : ''}`}
+              >
+                {post.data.heroImage && (
+                  <figure>
+                    <Image
+                      width={index === 0 ? 1020 : 720}
+                      height={index === 0 ? 510 : 360}
+                      src={post.data.heroImage}
+                      alt=""
+                      class="w-full object-cover"
+                    />
+                  </figure>
+                )}
+                <div class="card-body">
+                  <h3 class="card-title">
+                    <a href={`/blog/${post.id}/`} class="link link-hover">
+                      {post.data.title}
+                    </a>
+                  </h3>
+                  <p class="text-base-content/70">{post.data.description}</p>
+                  <div class="flex flex-wrap justify-between items-center mt-4 gap-4">
+                    <FormattedDate date={post.data.pubDate} />
+                    {post.data.tags && post.data.tags.length > 0 && (
+                      <TagList tags={post.data.tags.slice(0, 3)} size="sm" />
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        {
+          recentPosts.length === 0 && (
+            <div class="text-center py-12">
+              <p class="text-base-content/70">No blog posts yet. Check back soon!</p>
+            </div>
+          )
+        }
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>

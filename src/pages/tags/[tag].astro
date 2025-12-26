@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import TagList from '../../components/TagList.astro';
+import { SITE_TITLE } from '../../consts';
+import { getAllTags, getPostsByTag } from '../../utils/tags';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tags = getAllTags(posts);
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { posts: getPostsByTag(posts, tag) },
+  }));
+}
+
+interface Props {
+  posts: Awaited<ReturnType<typeof getPostsByTag>>;
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={`Posts tagged "${tag}" | ${SITE_TITLE}`}
+      description={`All posts tagged with ${tag}`}
+    />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
+      <nav class="breadcrumbs text-sm mb-6">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/tags">Tags</a></li>
+          <li>{tag}</li>
+        </ul>
+      </nav>
+
+      <h1 class="text-4xl font-bold mb-8">
+        Posts tagged <span class="badge badge-primary badge-lg">{tag}</span>
+      </h1>
+
+      <div class="space-y-6">
+        {
+          posts.map((post) => (
+            <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+              <div class="card-body">
+                <h2 class="card-title">
+                  <a href={`/blog/${post.id}/`} class="link link-hover">
+                    {post.data.title}
+                  </a>
+                </h2>
+                <p class="text-base-content/70">{post.data.description}</p>
+                <div class="flex flex-wrap justify-between items-center gap-4 mt-2">
+                  <FormattedDate date={post.data.pubDate} />
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <TagList tags={post.data.tags} size="sm" />
+                  )}
+                </div>
+                <div class="card-actions justify-end mt-2">
+                  <a href={`/blog/${post.id}/`} class="btn btn-primary btn-sm">
+                    Read more
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

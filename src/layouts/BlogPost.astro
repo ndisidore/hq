@@ -2,85 +2,129 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import PostNavigation from '../components/PostNavigation.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import TagList from '../components/TagList.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+  post: CollectionEntry<'blog'>;
+  prevPost?: CollectionEntry<'blog'> | null;
+  nextPost?: CollectionEntry<'blog'> | null;
+  headings: { depth: number; slug: string; text: string }[];
+  readingTime: number;
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { post, prevPost, nextPost, headings, readingTime } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags } = post.data;
 ---
 
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-6xl flex-1">
+      <Breadcrumb
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Blog', href: '/blog' },
+          { label: title },
+        ]}
+      />
+
+      <div class="lg:grid lg:grid-cols-[1fr_250px] lg:gap-8">
+        <article class="prose prose-lg max-w-none">
+          {
+            heroImage && (
+              <div class="mb-8 not-prose">
+                <Image
+                  width={1020}
+                  height={510}
+                  src={heroImage}
+                  alt=""
+                  class="rounded-xl shadow-lg w-full object-cover"
+                />
+              </div>
+            )
+          }
+
+          <header class="not-prose mb-8">
+            <h1 class="text-4xl font-bold mb-4">{title}</h1>
+
+            <div class="flex flex-wrap items-center gap-4 text-base-content/70">
+              <div class="flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+                <FormattedDate date={pubDate} />
+              </div>
+
+              {
+                updatedDate && (
+                  <div class="flex items-center gap-2 italic">
+                    <span>Updated:</span>
+                    <FormattedDate date={updatedDate} />
+                  </div>
+                )
+              }
+
+              <div class="flex items-center gap-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{readingTime} min read</span>
+              </div>
+            </div>
+
+            {
+              tags && tags.length > 0 && (
+                <div class="mt-4">
+                  <TagList tags={tags} />
+                </div>
+              )
+            }
+          </header>
+
+          <div class="divider"></div>
+
+          <slot />
+        </article>
+
+        <!-- Sidebar with TOC (hidden on mobile) -->
+        <aside class="hidden lg:block">
+          <TableOfContents headings={headings} />
+        </aside>
+      </div>
+
+      <PostNavigation prevPost={prevPost} nextPost={nextPost} />
+    </main>
+    <Footer />
+  </body>
 </html>

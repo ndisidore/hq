@@ -1,0 +1,227 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+// Define your CV data - customize these with your own information
+const experience = [
+  {
+    title: 'Senior Software Engineer',
+    company: 'Company Name',
+    period: '2022 - Present',
+    description:
+      'Description of your role and key achievements. Highlight impactful projects and technologies used.',
+    technologies: ['TypeScript', 'React', 'Node.js', 'AWS'],
+  },
+  {
+    title: 'Software Engineer',
+    company: 'Previous Company',
+    period: '2019 - 2022',
+    description:
+      'Description of your role and accomplishments. Focus on growth and meaningful contributions.',
+    technologies: ['JavaScript', 'Vue.js', 'Python', 'PostgreSQL'],
+  },
+  {
+    title: 'Junior Developer',
+    company: 'First Company',
+    period: '2017 - 2019',
+    description: 'Started your career here. Mention foundational skills learned and early wins.',
+    technologies: ['HTML', 'CSS', 'JavaScript', 'PHP'],
+  },
+];
+
+const education = [
+  {
+    degree: 'M.S. Computer Science',
+    institution: 'University Name',
+    period: '2015 - 2017',
+    description: 'Specialized in distributed systems. Thesis on real-time data processing.',
+  },
+  {
+    degree: 'B.S. Computer Science',
+    institution: 'University Name',
+    period: '2011 - 2015',
+    description: 'Graduated with honors. Focus on software engineering and algorithms.',
+  },
+];
+
+const skills = {
+  Languages: ['TypeScript', 'JavaScript', 'Python', 'Go', 'Rust'],
+  Frontend: ['React', 'Vue.js', 'Astro', 'Tailwind CSS', 'Next.js'],
+  Backend: ['Node.js', 'FastAPI', 'PostgreSQL', 'Redis', 'GraphQL'],
+  DevOps: ['Docker', 'Kubernetes', 'AWS', 'Cloudflare', 'GitHub Actions'],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`CV | ${SITE_TITLE}`} description="My professional experience and skills" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
+      <h1 class="text-4xl font-bold mb-2">Curriculum Vitae</h1>
+      <p class="text-base-content/70 mb-8">My professional journey and skills</p>
+
+      <!-- Experience Section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            ></path>
+          </svg>
+          Experience
+        </h2>
+
+        <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
+          {
+            experience.map((job, index) => (
+              <li>
+                {index > 0 && <hr class="bg-primary" />}
+                <div class="timeline-middle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-5 w-5 text-primary"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class={`timeline-${index % 2 === 0 ? 'start' : 'end'} mb-10 ${index % 2 === 0 ? 'md:text-end' : ''}`}
+                >
+                  <time class="font-mono italic text-sm">{job.period}</time>
+                  <div class="text-lg font-black">{job.title}</div>
+                  <div class="text-primary font-semibold">{job.company}</div>
+                  <p class="mt-2 text-base-content/80">{job.description}</p>
+                  <div
+                    class={`flex flex-wrap gap-2 mt-3 ${index % 2 === 0 ? 'md:justify-end' : ''}`}
+                  >
+                    {job.technologies.map((tech) => (
+                      <span class="badge badge-sm badge-outline">{tech}</span>
+                    ))}
+                  </div>
+                </div>
+                {index < experience.length - 1 && <hr class="bg-primary" />}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Education Section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+            <path
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+            ></path>
+          </svg>
+          Education
+        </h2>
+
+        <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
+          {
+            education.map((edu, index) => (
+              <li>
+                {index > 0 && <hr class="bg-secondary" />}
+                <div class="timeline-middle">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-5 w-5 text-secondary"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class={`timeline-${index % 2 === 0 ? 'start' : 'end'} mb-10 ${index % 2 === 0 ? 'md:text-end' : ''}`}
+                >
+                  <time class="font-mono italic text-sm">{edu.period}</time>
+                  <div class="text-lg font-black">{edu.degree}</div>
+                  <div class="text-secondary font-semibold">{edu.institution}</div>
+                  <p class="mt-2 text-base-content/80">{edu.description}</p>
+                </div>
+                {index < education.length - 1 && <hr class="bg-secondary" />}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Skills Section -->
+      <section>
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            ></path>
+          </svg>
+          Skills
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {
+            Object.entries(skills).map(([category, skillList]) => (
+              <div class="card bg-base-200">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">{category}</h3>
+                  <div class="flex flex-wrap gap-2">
+                    {skillList.map((skill) => (
+                      <span class="badge badge-primary">{skill}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

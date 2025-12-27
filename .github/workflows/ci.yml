@@ -30,4 +30,4 @@ jobs:
       - name: Run Harper grammar check
         # TODO: Remove continue-on-error once placeholder Lorem Ipsum content is replaced
         continue-on-error: true
-        run: harper-cli lint --user-dict-path .harper/dictionary.txt src/content/blog/*.md
+        run: ./scripts/grammar-check.sh

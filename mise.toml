@@ -2,3 +2,4 @@
 node = "lts"
 "npm:markdownlint-cli" = "latest"
 harper-cli = "latest"
+pandoc = "latest"

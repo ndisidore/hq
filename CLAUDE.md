@@ -44,6 +44,20 @@ Tags have dedicated filter pages at `/tags/[tag]`. Tag utilities are in `src/uti
 
 Two DaisyUI themes: "light" (default) and "dracula" (dark). Theme persistence uses localStorage with system preference fallback. The `ThemeToggle.astro` component handles switching. FOUC is prevented by an inline script in `BaseHead.astro` that sets the theme before render.
 
+### Icons
+
+Icons use [Iconify](https://iconify.design/) via `astro-icon` with the Tabler icon set:
+
+```astro
+---
+import { Icon } from 'astro-icon/components';
+---
+<Icon name="tabler:calendar" class="h-4 w-4" />
+<Icon name="tabler:brand-github" class="w-5 h-5" />
+```
+
+Browse icons at https://icon-sets.iconify.design/tabler/. To add other icon sets, install `@iconify-json/<set-name>`.
+
 ### Key Files
 
 - `src/consts.ts` - Site metadata (title, author, social links)

@@ -1,71 +1,108 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
   ],
-  // Weekly schedule - runs on Monday mornings
-  "schedule": ["before 9am on Monday"],
-  "timezone": "America/New_York",
-  // Limit open PRs to avoid noise
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
-  // Auto-merge patch updates for non-major dependencies
-  "automerge": false,
-  // Package groupings
-  "packageRules": [
-    // Astro ecosystem
-    {
-      "groupName": "Astro",
-      "matchPackagePatterns": ["^astro$", "^@astrojs/"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    {
-      "groupName": "Astro (major)",
-      "matchPackagePatterns": ["^astro$", "^@astrojs/"],
-      "matchUpdateTypes": ["major"]
-    },
-    // Tailwind ecosystem
-    {
-      "groupName": "Tailwind",
-      "matchPackagePatterns": ["^tailwindcss$", "^@tailwindcss/", "^daisyui$"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    {
-      "groupName": "Tailwind (major)",
-      "matchPackagePatterns": ["^tailwindcss$", "^@tailwindcss/", "^daisyui$"],
-      "matchUpdateTypes": ["major"]
-    },
-    // Cloudflare tooling
-    {
-      "groupName": "Cloudflare",
-      "matchPackagePatterns": ["^wrangler$", "^@cloudflare/"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    // Biome linter
-    {
-      "groupName": "Biome",
-      "matchPackagePatterns": ["^@biomejs/"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    // Type definitions
-    {
-      "groupName": "TypeScript types",
-      "matchPackagePatterns": ["^@types/"],
-      "matchUpdateTypes": ["minor", "patch", "major"]
-    },
-    // Pin actions in CI workflows
-    {
-      "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"]
-    }
+  schedule: [
+    'before 9am on Monday',
   ],
-  // Labels for PRs
-  "labels": ["dependencies"],
-  // Commit message style
-  "commitMessagePrefix": "chore(deps):",
-  "commitMessageAction": "update",
-  // PR settings
-  "rebaseWhen": "conflicted",
-  "platformAutomerge": false
+  timezone: 'America/New_York',
+  prConcurrentLimit: 5,
+  prHourlyLimit: 2,
+  automerge: false,
+  packageRules: [
+    {
+      groupName: 'Astro',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      matchPackageNames: [
+        '/^astro$/',
+        '/^@astrojs//',
+      ],
+    },
+    {
+      groupName: 'Astro (major)',
+      matchUpdateTypes: [
+        'major',
+      ],
+      matchPackageNames: [
+        '/^astro$/',
+        '/^@astrojs//',
+      ],
+    },
+    {
+      groupName: 'Tailwind',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      matchPackageNames: [
+        '/^tailwindcss$/',
+        '/^@tailwindcss//',
+        '/^daisyui$/',
+      ],
+    },
+    {
+      groupName: 'Tailwind (major)',
+      matchUpdateTypes: [
+        'major',
+      ],
+      matchPackageNames: [
+        '/^tailwindcss$/',
+        '/^@tailwindcss//',
+        '/^daisyui$/',
+      ],
+    },
+    {
+      groupName: 'Cloudflare',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      matchPackageNames: [
+        '/^wrangler$/',
+        '/^@cloudflare//',
+      ],
+    },
+    {
+      groupName: 'Biome',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      matchPackageNames: [
+        '/^@biomejs//',
+      ],
+    },
+    {
+      groupName: 'TypeScript types',
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+        'major',
+      ],
+      matchPackageNames: [
+        '/^@types//',
+      ],
+    },
+    {
+      groupName: 'GitHub Actions',
+      matchManagers: [
+        'github-actions',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+    },
+  ],
+  labels: [
+    'dependencies',
+  ],
+  commitMessagePrefix: 'chore(deps):',
+  commitMessageAction: 'update',
+  rebaseWhen: 'conflicted',
+  platformAutomerge: false,
 }

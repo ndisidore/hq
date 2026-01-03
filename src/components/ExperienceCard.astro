@@ -1,0 +1,249 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  id: string;
+  title: string;
+  company: string;
+  companyUrl?: string;
+  location: string;
+  period: string;
+  description: string;
+  responsibilities?: string[];
+  technologies: string[];
+}
+
+const {
+  id,
+  title,
+  company,
+  companyUrl,
+  location,
+  period,
+  description,
+  responsibilities = [],
+  technologies,
+} = Astro.props;
+
+// Map technology names to logos icons
+const techIconMap: Record<string, string> = {
+  'GraphQL': 'logos:graphql',
+  'Node.js': 'logos:nodejs-icon',
+  'Python': 'logos:python',
+  'PostgreSQL': 'logos:postgresql',
+  'AWS Lambda': 'logos:aws-lambda',
+  'DynamoDB': 'logos:aws-dynamodb',
+  'Kinesis': 'logos:aws-kinesis',
+  'ECS': 'logos:aws-ecs',
+  'IoT Core': 'logos:aws',
+  'Redis': 'logos:redis',
+  'Material UI': 'logos:material-ui',
+  'Webpack': 'logos:webpack',
+  'React': 'logos:react',
+  'Redux': 'logos:redux',
+  'CloudFormation': 'logos:aws-cloudformation',
+  'S3': 'logos:aws-s3',
+  'CloudFront': 'logos:aws-cloudfront',
+  'Express.js': 'logos:express',
+  'PHP': 'logos:php',
+  'Ruby on Rails': 'logos:ruby',
+  'JavaScript': 'logos:javascript',
+  'TypeScript': 'logos:typescript-icon',
+  'Backbone.js': 'logos:backbone-icon',
+  'AWS EC2': 'logos:aws-ec2',
+  'Docker': 'logos:docker-icon',
+  'nginx': 'logos:nginx',
+  'MySQL': 'logos:mysql-icon',
+  'Grunt': 'logos:grunt',
+  'Terraform': 'logos:terraform-icon',
+  'CSS': 'logos:css-3',
+};
+
+function getTechIcon(tech: string): string | null {
+  return techIconMap[tech] || null;
+}
+
+const maxCollapsedTech = 10;
+const hasMoreTech = technologies.length > maxCollapsedTech;
+---
+
+<div class="experience-card relative" data-id={id}>
+  <!-- Timeline dot -->
+  <div class="absolute left-[11px] top-8 w-6 h-6 rounded-full bg-base-100 border-2 border-primary hidden md:flex items-center justify-center z-10">
+    <div class="w-2 h-2 rounded-full bg-primary"></div>
+  </div>
+
+  <!-- Card -->
+  <div
+    id={`exp-${id}`}
+    class="card bg-base-200 transition-all hover:shadow-lg hover:border-primary/50 md:ml-14 scroll-mt-24 border border-base-300"
+  >
+    <div class="card-body p-5">
+      <!-- Header - clickable to toggle -->
+      <div class="experience-header cursor-pointer" role="button" tabindex="0" aria-expanded="false">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex-1 space-y-2">
+            <h3 class="card-title text-xl md:text-2xl">{title}</h3>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm">
+              {companyUrl ? (
+                <a
+                  href={companyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 transition-colors"
+                  onclick="event.stopPropagation()"
+                >
+                  <Icon name="tabler:building" class="w-4 h-4" />
+                  {company}
+                </a>
+              ) : (
+                <span class="flex items-center gap-1.5 font-medium text-primary">
+                  <Icon name="tabler:building" class="w-4 h-4" />
+                  {company}
+                </span>
+              )}
+              <span class="hidden sm:inline text-base-content/30">•</span>
+              <span class="flex items-center gap-1.5 text-base-content/70">
+                <Icon name="tabler:map-pin" class="w-4 h-4" />
+                {location}
+              </span>
+              <span class="hidden sm:inline text-base-content/30">•</span>
+              <span class="flex items-center gap-1.5 text-base-content/70">
+                <Icon name="tabler:calendar" class="w-4 h-4" />
+                {period}
+              </span>
+            </div>
+          </div>
+          <button
+            class="experience-toggle btn btn-ghost btn-sm btn-square shrink-0"
+            aria-label="Expand details"
+          >
+            <Icon name="tabler:chevron-down" class="w-5 h-5 transition-transform duration-200" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsed content (description + limited tech) -->
+      <div class="experience-collapsed mt-4">
+        <p class="text-sm text-base-content/70 leading-relaxed">{description}</p>
+        {technologies.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-3">
+            {technologies.slice(0, maxCollapsedTech).map((tech) => {
+              const iconName = getTechIcon(tech);
+              return iconName ? (
+                <div class="tooltip" data-tip={tech}>
+                  <span class="badge badge-outline cursor-default">
+                    <Icon name={iconName} class="w-5 h-5" />
+                  </span>
+                </div>
+              ) : (
+                <span class="badge badge-outline">
+                  {tech}
+                </span>
+              );
+            })}
+            {hasMoreTech && (
+              <span class="badge badge-outline">
+                +{technologies.length - maxCollapsedTech} more
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <!-- Expanded content (responsibilities + all tech) -->
+      <div class="experience-expanded hidden mt-4">
+        {responsibilities.length > 0 && (
+          <ul class="space-y-1.5 text-sm mb-4">
+            {responsibilities.map((item) => (
+              <li class="flex gap-2 items-start">
+                <span class="text-primary shrink-0 leading-snug">•</span>
+                <span class="leading-snug">{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {technologies.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {technologies.map((tech) => {
+              const iconName = getTechIcon(tech);
+              return (
+                <span class="badge badge-primary badge-outline gap-1.5">
+                  {iconName && <Icon name={iconName} class="w-4 h-4" />}
+                  {tech}
+                </span>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initExperienceCards() {
+    document.querySelectorAll('.experience-card').forEach((card) => {
+      const header = card.querySelector('.experience-header');
+      const toggle = card.querySelector('.experience-toggle');
+      const collapsed = card.querySelector('.experience-collapsed');
+      const expanded = card.querySelector('.experience-expanded');
+      const chevron = toggle?.querySelector('svg');
+      const cardId = card.getAttribute('data-id');
+
+      let isExpanded = false;
+
+      function setExpanded(expand: boolean) {
+        isExpanded = expand;
+        header?.setAttribute('aria-expanded', String(expand));
+        toggle?.setAttribute('aria-label', expand ? 'Collapse details' : 'Expand details');
+
+        if (expand) {
+          collapsed?.classList.add('hidden');
+          expanded?.classList.remove('hidden');
+          chevron?.classList.add('rotate-180');
+        } else {
+          collapsed?.classList.remove('hidden');
+          expanded?.classList.add('hidden');
+          chevron?.classList.remove('rotate-180');
+        }
+      }
+
+      function handleToggle(e: Event) {
+        e.preventDefault();
+        setExpanded(!isExpanded);
+      }
+
+      header?.addEventListener('click', handleToggle);
+      header?.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          handleToggle(e);
+        }
+      });
+      toggle?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleToggle(e);
+      });
+
+      // Check for hash on load and hashchange
+      function checkHash() {
+        if (cardId && window.location.hash === `#${cardId}`) {
+          setExpanded(true);
+          setTimeout(() => {
+            const element = card.querySelector(`#exp-${cardId}`);
+            element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
+
+      checkHash();
+      window.addEventListener('hashchange', checkHash);
+    });
+  }
+
+  // Run on initial load
+  initExperienceCards();
+
+  // Re-run after Astro view transitions
+  document.addEventListener('astro:after-swap', initExperienceCards);
+</script>

@@ -1,39 +1,90 @@
 ---
-// Theme toggle component using DaisyUI swap
+// Theme dropdown component using DaisyUI
 import { Icon } from 'astro-icon/components';
+
+const themes = [
+  { name: 'light', label: 'Light', icon: 'tabler:sun' },
+  { name: 'dark', label: 'Dark', icon: 'tabler:moon' },
+  { name: 'cupcake', label: 'Cupcake', icon: 'tabler:cake' },
+  { name: 'emerald', label: 'Emerald', icon: 'tabler:leaf' },
+  { name: 'corporate', label: 'Corporate', icon: 'tabler:building' },
+  { name: 'synthwave', label: 'Synthwave', icon: 'tabler:music' },
+  { name: 'retro', label: 'Retro', icon: 'tabler:device-tv' },
+  { name: 'cyberpunk', label: 'Cyberpunk', icon: 'tabler:robot' },
+  { name: 'valentine', label: 'Valentine', icon: 'tabler:heart' },
+  { name: 'halloween', label: 'Halloween', icon: 'tabler:pumpkin-scary' },
+  { name: 'garden', label: 'Garden', icon: 'tabler:plant' },
+  { name: 'forest', label: 'Forest', icon: 'tabler:trees' },
+  { name: 'lofi', label: 'Lo-Fi', icon: 'tabler:headphones' },
+  { name: 'pastel', label: 'Pastel', icon: 'tabler:palette' },
+  { name: 'fantasy', label: 'Fantasy', icon: 'tabler:wand' },
+  { name: 'dracula', label: 'Dracula', icon: 'tabler:bat' },
+  { name: 'night', label: 'Night', icon: 'tabler:moon-stars' },
+  { name: 'coffee', label: 'Coffee', icon: 'tabler:coffee' },
+  { name: 'winter', label: 'Winter', icon: 'tabler:snowflake' },
+  { name: 'dim', label: 'Dim', icon: 'tabler:brightness-down' },
+  { name: 'nord', label: 'Nord', icon: 'tabler:compass' },
+  { name: 'sunset', label: 'Sunset', icon: 'tabler:sunset' },
+];
 ---
 
-<label class="swap swap-rotate btn btn-ghost btn-circle">
-  <input type="checkbox" id="theme-toggle" class="theme-controller" value="dracula" />
-
-  <!-- Sun icon (shown in dark mode, click to switch to light) -->
-  <Icon name="tabler:sun" class="swap-on h-6 w-6" />
-
-  <!-- Moon icon (shown in light mode, click to switch to dark) -->
-  <Icon name="tabler:moon" class="swap-off h-6 w-6" />
-</label>
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-ghost btn-circle" aria-label="Select theme">
+    <Icon name="tabler:palette" class="h-6 w-6" />
+  </div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-50 w-52 p-2 shadow-xl max-h-96 overflow-y-auto">
+    {themes.map((theme) => (
+      <li>
+        <button
+          class="theme-option flex items-center gap-2"
+          data-theme-value={theme.name}
+        >
+          <Icon name={theme.icon} class="h-4 w-4" />
+          {theme.label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
 
 <script>
-  function initThemeToggle() {
-    const toggle = document.getElementById('theme-toggle') as HTMLInputElement;
-    if (!toggle) return;
+  function initThemeDropdown() {
+    const themeButtons = document.querySelectorAll('.theme-option');
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
 
-    // Set initial state based on current theme
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    toggle.checked = currentTheme === 'dracula';
+    // Update active state
+    function updateActiveState(themeName: string) {
+      themeButtons.forEach((btn) => {
+        const btnTheme = btn.getAttribute('data-theme-value');
+        if (btnTheme === themeName) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
 
-    // Handle toggle change
-    toggle.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement;
-      const theme = target.checked ? 'dracula' : 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+    // Set initial active state
+    updateActiveState(currentTheme);
+
+    // Handle theme selection
+    themeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const theme = btn.getAttribute('data-theme-value');
+        if (theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          localStorage.setItem('theme', theme);
+          updateActiveState(theme);
+          // Close dropdown by removing focus
+          (document.activeElement as HTMLElement)?.blur();
+        }
+      });
     });
   }
 
   // Run on initial load
-  initThemeToggle();
+  initThemeDropdown();
 
-  // Re-run on Astro page transitions (View Transitions API)
-  document.addEventListener('astro:after-swap', initThemeToggle);
+  // Re-run on Astro page transitions
+  document.addEventListener('astro:after-swap', initThemeDropdown);
 </script>

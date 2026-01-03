@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { ME, SOCIAL_LINKS } from '../consts';
 
 const today = new Date();
 ---
@@ -16,7 +17,7 @@ const today = new Date();
   <nav>
     <div class="grid grid-flow-col gap-4">
       <a
-        href="https://github.com/yourusername"
+        href={SOCIAL_LINKS.github}
         target="_blank"
         rel="noopener noreferrer"
         class="hover:text-primary transition-colors"
@@ -25,16 +26,7 @@ const today = new Date();
         <Icon name="tabler:brand-github" class="w-6 h-6" />
       </a>
       <a
-        href="https://twitter.com/yourusername"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hover:text-primary transition-colors"
-        aria-label="Twitter"
-      >
-        <Icon name="tabler:brand-x" class="w-6 h-6" />
-      </a>
-      <a
-        href="https://linkedin.com/in/yourusername"
+        href={SOCIAL_LINKS.linkedin}
         target="_blank"
         rel="noopener noreferrer"
         class="hover:text-primary transition-colors"
@@ -46,6 +38,6 @@ const today = new Date();
   </nav>
 
   <aside>
-    <p>&copy; {today.getFullYear()} Your Name. All rights reserved.</p>
+    <p>&copy; {today.getFullYear()} {ME}. All rights reserved.</p>
   </aside>
 </footer>

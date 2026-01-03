@@ -19,9 +19,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- Theme initialization (prevents flash of unstyled content) -->
 <script is:inline>
   (function() {
+    const validThemes = ['light','dark','cupcake','emerald','corporate','synthwave','retro','cyberpunk','valentine','halloween','garden','forest','lofi','pastel','fantasy','dracula','night','coffee','winter','dim','nord','sunset'];
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'dracula' : 'light');
+    const defaultTheme = prefersDark ? 'dracula' : 'light';
+    const theme = (savedTheme && validThemes.includes(savedTheme)) ? savedTheme : defaultTheme;
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>

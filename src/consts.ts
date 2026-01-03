@@ -41,3 +41,37 @@ export const THEMES = [
 ] as const;
 
 export const THEME_NAMES = THEMES.map((t) => t.name);
+
+// Technology name to icon mapping for experience/skills displays
+export const TECH_ICON_MAP: Record<string, string> = {
+  GraphQL: 'logos:graphql',
+  'Node.js': 'logos:nodejs-icon',
+  Python: 'logos:python',
+  PostgreSQL: 'logos:postgresql',
+  'AWS Lambda': 'logos:aws-lambda',
+  DynamoDB: 'logos:aws-dynamodb',
+  Kinesis: 'logos:aws-kinesis',
+  ECS: 'logos:aws-ecs',
+  'IoT Core': 'logos:aws',
+  Redis: 'logos:redis',
+  'Material UI': 'logos:material-ui',
+  Webpack: 'logos:webpack',
+  React: 'logos:react',
+  Redux: 'logos:redux',
+  CloudFormation: 'logos:aws-cloudformation',
+  S3: 'logos:aws-s3',
+  CloudFront: 'logos:aws-cloudfront',
+  'Express.js': 'logos:express',
+  PHP: 'logos:php',
+  'Ruby on Rails': 'logos:ruby',
+  JavaScript: 'logos:javascript',
+  TypeScript: 'logos:typescript-icon',
+  'Backbone.js': 'logos:backbone-icon',
+  'AWS EC2': 'logos:aws-ec2',
+  Docker: 'logos:docker-icon',
+  nginx: 'logos:nginx',
+  MySQL: 'logos:mysql-icon',
+  Grunt: 'logos:grunt',
+  Terraform: 'logos:terraform-icon',
+  CSS: 'logos:css-3',
+};

@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { TECH_ICON_MAP } from '../consts';
 
 interface Props {
   id: string;
@@ -25,42 +26,8 @@ const {
   technologies,
 } = Astro.props;
 
-// Map technology names to logos icons
-const techIconMap: Record<string, string> = {
-  'GraphQL': 'logos:graphql',
-  'Node.js': 'logos:nodejs-icon',
-  'Python': 'logos:python',
-  'PostgreSQL': 'logos:postgresql',
-  'AWS Lambda': 'logos:aws-lambda',
-  'DynamoDB': 'logos:aws-dynamodb',
-  'Kinesis': 'logos:aws-kinesis',
-  'ECS': 'logos:aws-ecs',
-  'IoT Core': 'logos:aws',
-  'Redis': 'logos:redis',
-  'Material UI': 'logos:material-ui',
-  'Webpack': 'logos:webpack',
-  'React': 'logos:react',
-  'Redux': 'logos:redux',
-  'CloudFormation': 'logos:aws-cloudformation',
-  'S3': 'logos:aws-s3',
-  'CloudFront': 'logos:aws-cloudfront',
-  'Express.js': 'logos:express',
-  'PHP': 'logos:php',
-  'Ruby on Rails': 'logos:ruby',
-  'JavaScript': 'logos:javascript',
-  'TypeScript': 'logos:typescript-icon',
-  'Backbone.js': 'logos:backbone-icon',
-  'AWS EC2': 'logos:aws-ec2',
-  'Docker': 'logos:docker-icon',
-  'nginx': 'logos:nginx',
-  'MySQL': 'logos:mysql-icon',
-  'Grunt': 'logos:grunt',
-  'Terraform': 'logos:terraform-icon',
-  'CSS': 'logos:css-3',
-};
-
 function getTechIcon(tech: string): string {
-  return techIconMap[tech] || 'tabler:code';
+  return TECH_ICON_MAP[tech] || 'tabler:code';
 }
 
 const maxCollapsedTech = 10;
@@ -90,8 +57,7 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
                   href={companyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 transition-colors"
-                  onclick="event.stopPropagation()"
+                  class="company-link flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 transition-colors"
                 >
                   <Icon name="tabler:building" class="w-4 h-4" />
                   {company}
@@ -176,22 +142,17 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
 </div>
 
 <script>
-  // Store card controllers for cleanup
+  // Store card controllers for hash-based expansion
   const cardControllers: Map<string, { setExpanded: (expand: boolean) => void }> = new Map();
-  let hashChangeHandler: (() => void) | null = null;
-
-  function cleanupExperienceCards() {
-    // Remove the hashchange listener
-    if (hashChangeHandler) {
-      window.removeEventListener('hashchange', hashChangeHandler);
-      hashChangeHandler = null;
-    }
-    cardControllers.clear();
-  }
+  let controller: AbortController | null = null;
 
   function initExperienceCards() {
-    // Clean up previous listeners before re-initializing
-    cleanupExperienceCards();
+    // Abort previous listeners before re-initializing
+    if (controller) {
+      controller.abort();
+    }
+    controller = new AbortController();
+    cardControllers.clear();
 
     document.querySelectorAll('.experience-card').forEach((card) => {
       const header = card.querySelector('.experience-header');
@@ -230,16 +191,27 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
         setExpanded(!isExpanded);
       }
 
-      header?.addEventListener('click', handleToggle);
+      const opts = { signal: controller!.signal };
+
+      // Header click/keydown handlers
+      header?.addEventListener('click', handleToggle, opts);
       header?.addEventListener('keydown', (e) => {
         if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
           handleToggle(e);
         }
-      });
+      }, opts);
+
+      // Toggle button click handler
       toggle?.addEventListener('click', (e) => {
         e.stopPropagation();
         handleToggle(e);
-      });
+      }, opts);
+
+      // Company link click handler (prevent toggle)
+      card.querySelector('.company-link')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+      }, opts);
 
       // Store controller for hash-based expansion
       if (cardId) {
@@ -247,29 +219,26 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
       }
     });
 
-    // Single hashchange handler for all cards
-    hashChangeHandler = () => {
-      const hash = window.location.hash.slice(1); // Remove '#'
-      const controller = cardControllers.get(hash);
-      if (controller) {
-        controller.setExpanded(true);
+    // Handle hash-based expansion
+    const handleHash = () => {
+      const hash = window.location.hash.slice(1);
+      const cardController = cardControllers.get(hash);
+      if (cardController) {
+        cardController.setExpanded(true);
         setTimeout(() => {
-          const element = document.getElementById(`exp-${hash}`);
-          element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById(`exp-${hash}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
       }
     };
 
-    // Check hash on load
-    hashChangeHandler();
-
-    // Listen for hash changes
-    window.addEventListener('hashchange', hashChangeHandler);
+    // Check hash on load and listen for changes
+    handleHash();
+    window.addEventListener('hashchange', handleHash, { signal: controller.signal });
   }
 
   // Run on initial load
   initExperienceCards();
 
-  // Re-run after Astro view transitions (cleanup happens inside initExperienceCards)
+  // Re-run after Astro view transitions
   document.addEventListener('astro:after-swap', initExperienceCards);
 </script>

@@ -24,7 +24,15 @@ import { THEMES } from '../consts';
 </div>
 
 <script>
+  let themeController: AbortController | null = null;
+
   function initThemeDropdown() {
+    // Abort previous listeners before adding new ones
+    if (themeController) {
+      themeController.abort();
+    }
+    themeController = new AbortController();
+
     const themeButtons = document.querySelectorAll('.theme-option');
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
 
@@ -54,7 +62,7 @@ import { THEMES } from '../consts';
           // Close dropdown by removing focus
           (document.activeElement as HTMLElement)?.blur();
         }
-      });
+      }, { signal: themeController!.signal });
     });
   }
 

@@ -13,3 +13,31 @@ export const SOCIAL_LINKS = {
   github: 'https://github.com/ndisidore',
   linkedin: 'https://linkedin.com/in/ndisidore',
 };
+
+// DaisyUI themes - keep in sync with app.css @plugin "daisyui" config
+export const THEMES = [
+  { name: 'light', label: 'Light', icon: 'tabler:sun' },
+  { name: 'dark', label: 'Dark', icon: 'tabler:moon' },
+  { name: 'cupcake', label: 'Cupcake', icon: 'tabler:cake' },
+  { name: 'emerald', label: 'Emerald', icon: 'tabler:leaf' },
+  { name: 'corporate', label: 'Corporate', icon: 'tabler:building' },
+  { name: 'synthwave', label: 'Synthwave', icon: 'tabler:music' },
+  { name: 'retro', label: 'Retro', icon: 'tabler:device-tv' },
+  { name: 'cyberpunk', label: 'Cyberpunk', icon: 'tabler:robot' },
+  { name: 'valentine', label: 'Valentine', icon: 'tabler:heart' },
+  { name: 'halloween', label: 'Halloween', icon: 'tabler:pumpkin-scary' },
+  { name: 'garden', label: 'Garden', icon: 'tabler:plant' },
+  { name: 'forest', label: 'Forest', icon: 'tabler:trees' },
+  { name: 'lofi', label: 'Lo-Fi', icon: 'tabler:headphones' },
+  { name: 'pastel', label: 'Pastel', icon: 'tabler:palette' },
+  { name: 'fantasy', label: 'Fantasy', icon: 'tabler:wand' },
+  { name: 'dracula', label: 'Dracula', icon: 'tabler:bat' },
+  { name: 'night', label: 'Night', icon: 'tabler:moon-stars' },
+  { name: 'coffee', label: 'Coffee', icon: 'tabler:coffee' },
+  { name: 'winter', label: 'Winter', icon: 'tabler:snowflake' },
+  { name: 'dim', label: 'Dim', icon: 'tabler:brightness-down' },
+  { name: 'nord', label: 'Nord', icon: 'tabler:compass' },
+  { name: 'sunset', label: 'Sunset', icon: 'tabler:sunset' },
+] as const;
+
+export const THEME_NAMES = THEMES.map((t) => t.name);

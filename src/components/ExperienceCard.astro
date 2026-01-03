@@ -59,8 +59,8 @@ const techIconMap: Record<string, string> = {
   'CSS': 'logos:css-3',
 };
 
-function getTechIcon(tech: string): string | null {
-  return techIconMap[tech] || null;
+function getTechIcon(tech: string): string {
+  return techIconMap[tech] || 'tabler:code';
 }
 
 const maxCollapsedTech = 10;
@@ -124,65 +124,75 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
       </div>
 
       <!-- Collapsed content (description + limited tech) -->
-      <div class="experience-collapsed mt-4">
-        <p class="text-sm text-base-content/70 leading-relaxed">{description}</p>
-        {technologies.length > 0 && (
-          <div class="flex flex-wrap gap-2 mt-3">
-            {technologies.slice(0, maxCollapsedTech).map((tech) => {
-              const iconName = getTechIcon(tech);
-              return iconName ? (
+      <div class="experience-collapsed grid grid-rows-[1fr] transition-all duration-200 ease-out mt-4">
+        <div class="overflow-hidden">
+          <p class="text-sm text-base-content/70 leading-relaxed">{description}</p>
+          {technologies.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-3">
+              {technologies.slice(0, maxCollapsedTech).map((tech) => (
                 <div class="tooltip" data-tip={tech}>
                   <span class="badge badge-outline cursor-default">
-                    <Icon name={iconName} class="w-5 h-5" />
+                    <Icon name={getTechIcon(tech)} class="w-5 h-5" />
                   </span>
                 </div>
-              ) : (
+              ))}
+              {hasMoreTech && (
                 <span class="badge badge-outline">
-                  {tech}
+                  +{technologies.length - maxCollapsedTech} more
                 </span>
-              );
-            })}
-            {hasMoreTech && (
-              <span class="badge badge-outline">
-                +{technologies.length - maxCollapsedTech} more
-              </span>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       <!-- Expanded content (responsibilities + all tech) -->
-      <div class="experience-expanded hidden mt-4">
-        {responsibilities.length > 0 && (
-          <ul class="space-y-1.5 text-sm mb-4">
-            {responsibilities.map((item) => (
-              <li class="flex gap-2 items-start">
-                <span class="text-primary shrink-0 leading-snug">•</span>
-                <span class="leading-snug">{item}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {technologies.length > 0 && (
-          <div class="flex flex-wrap gap-2">
-            {technologies.map((tech) => {
-              const iconName = getTechIcon(tech);
-              return (
+      <div class="experience-expanded grid grid-rows-[0fr] transition-all duration-200 ease-out mt-0">
+        <div class="overflow-hidden">
+          {responsibilities.length > 0 && (
+            <ul class="space-y-1.5 text-sm mb-4">
+              {responsibilities.map((item) => (
+                <li class="flex gap-2 items-start">
+                  <span class="text-primary shrink-0 leading-snug">•</span>
+                  <span class="leading-snug">{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {technologies.length > 0 && (
+            <div class="flex flex-wrap gap-2">
+              {technologies.map((tech) => (
                 <span class="badge badge-primary badge-outline gap-1.5">
-                  {iconName && <Icon name={iconName} class="w-4 h-4" />}
+                  <Icon name={getTechIcon(tech)} class="w-4 h-4" />
                   {tech}
                 </span>
-              );
-            })}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+  // Store card controllers for cleanup
+  const cardControllers: Map<string, { setExpanded: (expand: boolean) => void }> = new Map();
+  let hashChangeHandler: (() => void) | null = null;
+
+  function cleanupExperienceCards() {
+    // Remove the hashchange listener
+    if (hashChangeHandler) {
+      window.removeEventListener('hashchange', hashChangeHandler);
+      hashChangeHandler = null;
+    }
+    cardControllers.clear();
+  }
+
   function initExperienceCards() {
+    // Clean up previous listeners before re-initializing
+    cleanupExperienceCards();
+
     document.querySelectorAll('.experience-card').forEach((card) => {
       const header = card.querySelector('.experience-header');
       const toggle = card.querySelector('.experience-toggle');
@@ -199,12 +209,18 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
         toggle?.setAttribute('aria-label', expand ? 'Collapse details' : 'Expand details');
 
         if (expand) {
-          collapsed?.classList.add('hidden');
-          expanded?.classList.remove('hidden');
+          // Collapse the summary, expand the details
+          collapsed?.classList.remove('grid-rows-[1fr]', 'mt-4');
+          collapsed?.classList.add('grid-rows-[0fr]', 'mt-0');
+          expanded?.classList.remove('grid-rows-[0fr]', 'mt-0');
+          expanded?.classList.add('grid-rows-[1fr]', 'mt-4');
           chevron?.classList.add('rotate-180');
         } else {
-          collapsed?.classList.remove('hidden');
-          expanded?.classList.add('hidden');
+          // Expand the summary, collapse the details
+          collapsed?.classList.remove('grid-rows-[0fr]', 'mt-0');
+          collapsed?.classList.add('grid-rows-[1fr]', 'mt-4');
+          expanded?.classList.remove('grid-rows-[1fr]', 'mt-4');
+          expanded?.classList.add('grid-rows-[0fr]', 'mt-0');
           chevron?.classList.remove('rotate-180');
         }
       }
@@ -225,25 +241,35 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
         handleToggle(e);
       });
 
-      // Check for hash on load and hashchange
-      function checkHash() {
-        if (cardId && window.location.hash === `#${cardId}`) {
-          setExpanded(true);
-          setTimeout(() => {
-            const element = card.querySelector(`#exp-${cardId}`);
-            element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 100);
-        }
+      // Store controller for hash-based expansion
+      if (cardId) {
+        cardControllers.set(cardId, { setExpanded });
       }
-
-      checkHash();
-      window.addEventListener('hashchange', checkHash);
     });
+
+    // Single hashchange handler for all cards
+    hashChangeHandler = () => {
+      const hash = window.location.hash.slice(1); // Remove '#'
+      const controller = cardControllers.get(hash);
+      if (controller) {
+        controller.setExpanded(true);
+        setTimeout(() => {
+          const element = document.getElementById(`exp-${hash}`);
+          element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    };
+
+    // Check hash on load
+    hashChangeHandler();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', hashChangeHandler);
   }
 
   // Run on initial load
   initExperienceCards();
 
-  // Re-run after Astro view transitions
+  // Re-run after Astro view transitions (cleanup happens inside initExperienceCards)
   document.addEventListener('astro:after-swap', initExperienceCards);
 </script>

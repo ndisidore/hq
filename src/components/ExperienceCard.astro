@@ -145,6 +145,7 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
   // Store card controllers for hash-based expansion
   const cardControllers: Map<string, { setExpanded: (expand: boolean) => void }> = new Map();
   let controller: AbortController | null = null;
+  let initialized = false;
 
   function initExperienceCards() {
     // Abort previous listeners before re-initializing
@@ -239,6 +240,9 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
   // Run on initial load
   initExperienceCards();
 
-  // Re-run after Astro view transitions
-  document.addEventListener('astro:after-swap', initExperienceCards);
+  // Re-run after Astro view transitions (guard against duplicate registration)
+  if (!initialized) {
+    initialized = true;
+    document.addEventListener('astro:after-swap', initExperienceCards);
+  }
 </script>

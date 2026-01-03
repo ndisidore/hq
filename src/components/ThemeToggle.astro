@@ -5,7 +5,7 @@ import { THEMES } from '../consts';
 ---
 
 <div class="dropdown dropdown-end">
-  <div tabindex="0" role="button" class="btn btn-ghost btn-circle" aria-label="Select theme">
+  <div tabindex="0" role="button" class="theme-trigger btn btn-ghost btn-circle" aria-label="Select theme">
     <Icon name="tabler:palette" class="h-6 w-6" />
   </div>
   <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-50 w-52 p-2 shadow-xl max-h-96 overflow-y-auto">
@@ -25,6 +25,7 @@ import { THEMES } from '../consts';
 
 <script>
   let themeController: AbortController | null = null;
+  let initialized = false;
 
   function initThemeDropdown() {
     // Abort previous listeners before adding new ones
@@ -32,7 +33,9 @@ import { THEMES } from '../consts';
       themeController.abort();
     }
     themeController = new AbortController();
+    const opts = { signal: themeController.signal };
 
+    const trigger = document.querySelector('.theme-trigger');
     const themeButtons = document.querySelectorAll('.theme-option');
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
 
@@ -51,24 +54,39 @@ import { THEMES } from '../consts';
     // Set initial active state
     updateActiveState(currentTheme);
 
+    // Keyboard handler for dropdown trigger (Enter/Space activation)
+    trigger?.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        (trigger as HTMLElement).click();
+      }
+    }, opts);
+
     // Handle theme selection
     themeButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const theme = btn.getAttribute('data-theme-value');
         if (theme) {
           document.documentElement.setAttribute('data-theme', theme);
-          localStorage.setItem('theme', theme);
+          try {
+            localStorage.setItem('theme', theme);
+          } catch (e) {
+            console.warn('Failed to persist theme to localStorage:', e);
+          }
           updateActiveState(theme);
           // Close dropdown by removing focus
           (document.activeElement as HTMLElement)?.blur();
         }
-      }, { signal: themeController!.signal });
+      }, opts);
     });
   }
 
   // Run on initial load
   initThemeDropdown();
 
-  // Re-run on Astro page transitions
-  document.addEventListener('astro:after-swap', initThemeDropdown);
+  // Re-run on Astro page transitions (guard against duplicate registration)
+  if (!initialized) {
+    initialized = true;
+    document.addEventListener('astro:after-swap', initThemeDropdown);
+  }
 </script>

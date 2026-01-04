@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import avatar from '../assets/logos/diz-rocks-avatar.svg';
 import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 ---
@@ -22,7 +24,10 @@ import ThemeToggle from './ThemeToggle.astro';
         <li><a href="/about">About</a></li>
       </ul>
     </div>
-    <a href="/" class="btn btn-ghost text-xl">{SITE_TITLE}</a>
+    <a href="/" class="btn btn-ghost text-xl gap-2">
+      <Image src={avatar} alt="" class="w-8 h-8" />
+      {SITE_TITLE}
+    </a>
   </div>
 
   <div class="navbar-center hidden lg:flex">

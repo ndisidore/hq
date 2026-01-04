@@ -1,12 +1,15 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TagList from '../components/TagList.astro';
-import { ME, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { ME, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import logoDark from '../assets/logos/diz-rocks-dark.svg';
+import logoLight from '../assets/logos/diz-rocks-light.svg';
 
 const recentPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -23,14 +26,57 @@ const recentPosts = (await getCollection('blog'))
     <main class="flex-1">
       <!-- Hero Section -->
       <section class="hero min-h-[60vh] bg-base-200">
-        <div class="hero-content text-center">
-          <div class="max-w-2xl">
-            <h1 class="text-5xl font-bold">Hello, I'm {ME}</h1>
+        <div class="hero-content flex-col lg:flex-row-reverse gap-8 lg:gap-16 py-12">
+          <!-- Logo -->
+          <div class="flex-shrink-0">
+            <Image
+              src={logoLight}
+              alt="Diz.Rocks logo"
+              class="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain logo-light"
+            />
+            <Image
+              src={logoDark}
+              alt="Diz.Rocks logo"
+              class="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain logo-dark hidden"
+            />
+          </div>
+
+          <!-- Content -->
+          <div class="max-w-2xl text-center lg:text-left">
+            <h1 class="text-4xl md:text-5xl font-bold">Hi, I'm {ME}</h1>
             <p class="py-6 text-lg text-base-content/80">
               A brief introduction about yourself. What you do, what you're passionate about, and
               what visitors can expect to find on your site.
             </p>
-            <div class="flex gap-4 justify-center flex-wrap">
+
+            <!-- Social Links -->
+            <div class="flex gap-4 justify-center lg:justify-start mb-6">
+              {SOCIAL_LINKS.github && (
+                <a
+                  href={SOCIAL_LINKS.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-ghost btn-circle"
+                  aria-label="GitHub"
+                >
+                  <Icon name="tabler:brand-github" class="w-6 h-6" />
+                </a>
+              )}
+              {SOCIAL_LINKS.linkedin && (
+                <a
+                  href={SOCIAL_LINKS.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-ghost btn-circle"
+                  aria-label="LinkedIn"
+                >
+                  <Icon name="tabler:brand-linkedin" class="w-6 h-6" />
+                </a>
+              )}
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="flex gap-4 justify-center lg:justify-start flex-wrap">
               <a href="/blog" class="btn btn-primary">Read My Blog</a>
               <a href="/cv" class="btn btn-outline">View My CV</a>
             </div>
@@ -91,5 +137,41 @@ const recentPosts = (await getCollection('blog'))
       </section>
     </main>
     <Footer />
+
+    <script>
+      // Theme-aware logo switching
+      const darkThemes = ['dark', 'dracula', 'night', 'coffee', 'dim', 'halloween', 'forest', 'synthwave', 'cyberpunk', 'sunset'];
+
+      function updateLogo() {
+        const theme = document.documentElement.getAttribute('data-theme') || 'light';
+        const isDark = darkThemes.includes(theme);
+        const logoLight = document.querySelector('.logo-light');
+        const logoDark = document.querySelector('.logo-dark');
+
+        if (logoLight && logoDark) {
+          if (isDark) {
+            logoLight.classList.add('hidden');
+            logoDark.classList.remove('hidden');
+          } else {
+            logoLight.classList.remove('hidden');
+            logoDark.classList.add('hidden');
+          }
+        }
+      }
+
+      // Initial update
+      updateLogo();
+
+      // Watch for theme changes
+      const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.attributeName === 'data-theme') {
+            updateLogo();
+          }
+        }
+      });
+
+      observer.observe(document.documentElement, { attributes: true });
+    </script>
   </body>
 </html>

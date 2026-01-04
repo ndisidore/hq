@@ -10,7 +10,21 @@
   prConcurrentLimit: 5,
   prHourlyLimit: 2,
   automerge: false,
+  // Monorepo: explicit package file locations
+  ignorePaths: [
+    '**/node_modules/**',
+    '**/dist/**',
+  ],
   packageRules: [
+    // Site-specific rules
+    {
+      matchFileNames: [
+        'site/package.json',
+      ],
+      addLabels: [
+        'site',
+      ],
+    },
     {
       groupName: 'Astro',
       matchUpdateTypes: [
@@ -96,6 +110,16 @@
         'minor',
         'patch',
       ],
+    },
+    // Future: Terraform in infra/
+    {
+      matchFileNames: [
+        'infra/**',
+      ],
+      addLabels: [
+        'infra',
+      ],
+      enabled: true,
     },
   ],
   labels: [

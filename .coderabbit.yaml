@@ -26,14 +26,14 @@ reviews:
       - '[no review]'
 
   path_filters:
-    - '!dist/**'
-    - '!node_modules/**'
-    - '!package-lock.json'
+    - '!site/dist/**'
+    - '!site/node_modules/**'
+    - '!site/package-lock.json'
     - '!*.lock'
-    - '!public/fonts/**'
+    - '!site/public/fonts/**'
 
   path_instructions:
-    - path: 'src/components/**/*.astro'
+    - path: 'site/src/components/**/*.astro'
       instructions: |
         Review Astro components for:
         - Proper separation of frontmatter (---) and template sections
@@ -43,7 +43,7 @@ reviews:
         - Efficient use of Astro.props destructuring
         - Avoidance of unnecessary client-side JavaScript
 
-    - path: 'src/layouts/**/*.astro'
+    - path: 'site/src/layouts/**/*.astro'
       instructions: |
         Review layout components for:
         - Proper use of <slot /> for content projection
@@ -52,7 +52,7 @@ reviews:
         - Accessibility landmarks (main, nav, header, footer)
         - Proper head management with Astro's <BaseHead> pattern
 
-    - path: 'src/pages/**/*.astro'
+    - path: 'site/src/pages/**/*.astro'
       instructions: |
         Review page components for:
         - Correct implementation of getStaticPaths() for dynamic routes
@@ -61,14 +61,14 @@ reviews:
         - Consistent use of layouts
         - Proper handling of route parameters
 
-    - path: 'src/pages/**/*.js'
+    - path: 'site/src/pages/**/*.js'
       instructions: |
         Review API routes and endpoints for:
         - Proper response headers and content types
         - Error handling for edge cases
         - Correct use of Astro's endpoint API
 
-    - path: 'src/utils/**/*.ts'
+    - path: 'site/src/utils/**/*.ts'
       instructions: |
         Review TypeScript utilities for:
         - Proper type definitions and exports
@@ -77,7 +77,7 @@ reviews:
         - Clear function signatures with documented parameters
         - Avoidance of 'any' type
 
-    - path: 'src/content/**/*.md'
+    - path: 'site/src/content/**/*.md'
       instructions: |
         Review Markdown content for:
         - Valid frontmatter with required fields (title, description, pubDate, tags)
@@ -86,7 +86,7 @@ reviews:
         - Valid internal links
         - Consistent formatting
 
-    - path: 'src/content/**/*.mdx'
+    - path: 'site/src/content/**/*.mdx'
       instructions: |
         Review MDX content for:
         - Valid frontmatter matching the content schema
@@ -94,7 +94,7 @@ reviews:
         - Correct component usage within markdown
         - Accessibility of interactive elements
 
-    - path: 'src/styles/**/*.css'
+    - path: 'site/src/styles/**/*.css'
       instructions: |
         Review CSS files for:
         - Proper use of Tailwind CSS v4 directives (@import, @theme, @layer)
@@ -103,7 +103,7 @@ reviews:
         - Proper CSS custom property naming
         - Dark mode compatibility
 
-    - path: 'src/content.config.ts'
+    - path: 'site/src/content.config.ts'
       instructions: |
         Review the content configuration for:
         - Correct Zod schema definitions
@@ -111,13 +111,21 @@ reviews:
         - Type safety for frontmatter fields
         - Sensible default values
 
-    - path: 'astro.config.mjs'
+    - path: 'site/astro.config.mjs'
       instructions: |
         Review Astro configuration for:
         - Correct integration setup
         - Proper adapter configuration for Cloudflare
         - Valid Vite plugin configuration
         - Sensible markdown/MDX settings
+
+    - path: 'infra/**/*.tf'
+      instructions: |
+        Review Terraform configuration for:
+        - Proper resource naming conventions
+        - Use of variables for configurable values
+        - Security best practices
+        - Proper state management considerations
 
   tools:
     biome:
@@ -146,3 +154,4 @@ knowledge_base:
     enabled: true
     filePatterns:
       - 'CLAUDE.md'
+      - 'site/CLAUDE.md'

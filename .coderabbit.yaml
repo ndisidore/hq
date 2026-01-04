@@ -1,0 +1,148 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+early_access: false
+
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: false
+  collapse_walkthrough: false
+  changed_files_summary: true
+
+  request_changes_workflow: false
+  labeling_instructions: []
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - main
+    ignore_title_keywords:
+      - 'WIP'
+      - 'DO NOT MERGE'
+      - '[skip ci]'
+      - '[no review]'
+
+  path_filters:
+    - '!dist/**'
+    - '!node_modules/**'
+    - '!package-lock.json'
+    - '!*.lock'
+    - '!public/fonts/**'
+
+  path_instructions:
+    - path: 'src/components/**/*.astro'
+      instructions: |
+        Review Astro components for:
+        - Proper separation of frontmatter (---) and template sections
+        - Correct use of Astro's client directives (client:load, client:idle, client:visible) only when necessary
+        - Accessibility best practices (ARIA labels, semantic HTML, keyboard navigation)
+        - Proper typing of component props using TypeScript
+        - Efficient use of Astro.props destructuring
+        - Avoidance of unnecessary client-side JavaScript
+
+    - path: 'src/layouts/**/*.astro'
+      instructions: |
+        Review layout components for:
+        - Proper use of <slot /> for content projection
+        - Consistent HTML document structure
+        - SEO best practices (meta tags, Open Graph, canonical URLs)
+        - Accessibility landmarks (main, nav, header, footer)
+        - Proper head management with Astro's <BaseHead> pattern
+
+    - path: 'src/pages/**/*.astro'
+      instructions: |
+        Review page components for:
+        - Correct implementation of getStaticPaths() for dynamic routes
+        - Proper data fetching in the frontmatter section
+        - SEO-friendly page titles and descriptions
+        - Consistent use of layouts
+        - Proper handling of route parameters
+
+    - path: 'src/pages/**/*.js'
+      instructions: |
+        Review API routes and endpoints for:
+        - Proper response headers and content types
+        - Error handling for edge cases
+        - Correct use of Astro's endpoint API
+
+    - path: 'src/utils/**/*.ts'
+      instructions: |
+        Review TypeScript utilities for:
+        - Proper type definitions and exports
+        - Null/undefined handling
+        - Pure functions where possible
+        - Clear function signatures with documented parameters
+        - Avoidance of 'any' type
+
+    - path: 'src/content/**/*.md'
+      instructions: |
+        Review Markdown content for:
+        - Valid frontmatter with required fields (title, description, pubDate, tags)
+        - Proper heading hierarchy (h1 -> h2 -> h3)
+        - Alt text for images
+        - Valid internal links
+        - Consistent formatting
+
+    - path: 'src/content/**/*.mdx'
+      instructions: |
+        Review MDX content for:
+        - Valid frontmatter matching the content schema
+        - Proper import statements for components
+        - Correct component usage within markdown
+        - Accessibility of interactive elements
+
+    - path: 'src/styles/**/*.css'
+      instructions: |
+        Review CSS files for:
+        - Proper use of Tailwind CSS v4 directives (@import, @theme, @layer)
+        - Consistent theming with DaisyUI conventions
+        - Avoidance of conflicting styles with Tailwind utilities
+        - Proper CSS custom property naming
+        - Dark mode compatibility
+
+    - path: 'src/content.config.ts'
+      instructions: |
+        Review the content configuration for:
+        - Correct Zod schema definitions
+        - Proper collection configuration
+        - Type safety for frontmatter fields
+        - Sensible default values
+
+    - path: 'astro.config.mjs'
+      instructions: |
+        Review Astro configuration for:
+        - Correct integration setup
+        - Proper adapter configuration for Cloudflare
+        - Valid Vite plugin configuration
+        - Sensible markdown/MDX settings
+
+  tools:
+    biome:
+      enabled: true
+    github-checks:
+      enabled: true
+    ast-grep:
+      essential_rules: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  learnings:
+    scope: auto
+  issues:
+    scope: auto
+  jira:
+    usage: disabled
+  linear:
+    usage: disabled
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - 'CLAUDE.md'

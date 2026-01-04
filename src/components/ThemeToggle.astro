@@ -1,39 +1,92 @@
 ---
-// Theme toggle component using DaisyUI swap
+// Theme dropdown component using DaisyUI
 import { Icon } from 'astro-icon/components';
+import { THEMES } from '../consts';
 ---
 
-<label class="swap swap-rotate btn btn-ghost btn-circle">
-  <input type="checkbox" id="theme-toggle" class="theme-controller" value="dracula" />
-
-  <!-- Sun icon (shown in dark mode, click to switch to light) -->
-  <Icon name="tabler:sun" class="swap-on h-6 w-6" />
-
-  <!-- Moon icon (shown in light mode, click to switch to dark) -->
-  <Icon name="tabler:moon" class="swap-off h-6 w-6" />
-</label>
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="theme-trigger btn btn-ghost btn-circle" aria-label="Select theme">
+    <Icon name="tabler:palette" class="h-6 w-6" />
+  </div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-50 w-52 p-2 shadow-xl max-h-96 overflow-y-auto">
+    {THEMES.map((theme) => (
+      <li>
+        <button
+          class="theme-option flex items-center gap-2"
+          data-theme-value={theme.name}
+        >
+          <Icon name={theme.icon} class="h-4 w-4" />
+          {theme.label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
 
 <script>
-  function initThemeToggle() {
-    const toggle = document.getElementById('theme-toggle') as HTMLInputElement;
-    if (!toggle) return;
+  let themeController: AbortController | null = null;
+  let initialized = false;
 
-    // Set initial state based on current theme
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    toggle.checked = currentTheme === 'dracula';
+  function initThemeDropdown() {
+    // Abort previous listeners before adding new ones
+    if (themeController) {
+      themeController.abort();
+    }
+    themeController = new AbortController();
+    const opts = { signal: themeController.signal };
 
-    // Handle toggle change
-    toggle.addEventListener('change', (e) => {
-      const target = e.target as HTMLInputElement;
-      const theme = target.checked ? 'dracula' : 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+    const trigger = document.querySelector('.theme-trigger');
+    const themeButtons = document.querySelectorAll('.theme-option');
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+    // Update active state
+    function updateActiveState(themeName: string) {
+      themeButtons.forEach((btn) => {
+        const btnTheme = btn.getAttribute('data-theme-value');
+        if (btnTheme === themeName) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Set initial active state
+    updateActiveState(currentTheme);
+
+    // Keyboard handler for dropdown trigger (Enter/Space activation)
+    trigger?.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+        e.preventDefault();
+        (trigger as HTMLElement).click();
+      }
+    }, opts);
+
+    // Handle theme selection
+    themeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const theme = btn.getAttribute('data-theme-value');
+        if (theme) {
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('theme', theme);
+          } catch (e) {
+            console.warn('Failed to persist theme to localStorage:', e);
+          }
+          updateActiveState(theme);
+          // Close dropdown by removing focus
+          (document.activeElement as HTMLElement)?.blur();
+        }
+      }, opts);
     });
   }
 
   // Run on initial load
-  initThemeToggle();
+  initThemeDropdown();
 
-  // Re-run on Astro page transitions (View Transitions API)
-  document.addEventListener('astro:after-swap', initThemeToggle);
+  // Re-run on Astro page transitions (guard against duplicate registration)
+  if (!initialized) {
+    initialized = true;
+    document.addEventListener('astro:after-swap', initThemeDropdown);
+  }
 </script>

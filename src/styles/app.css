@@ -3,7 +3,27 @@
 @plugin "daisyui" {
   themes:
     light --default,
-    dracula --prefersdark;
+    dark,
+    cupcake,
+    emerald,
+    corporate,
+    synthwave,
+    retro,
+    cyberpunk,
+    valentine,
+    halloween,
+    garden,
+    forest,
+    lofi,
+    pastel,
+    fantasy,
+    dracula --prefersdark,
+    night,
+    coffee,
+    winter,
+    dim,
+    nord,
+    sunset;
 }
 
 /* Atkinson Hyperlegible Font */
@@ -181,6 +201,11 @@ html[data-theme="dracula"] .shiki span {
 
 .card:hover {
   transform: translateY(-2px);
+}
+
+/* Override DaisyUI badge to use subtle rounding instead of pill shape */
+.badge {
+  border-radius: 0.375rem; /* rounded-md */
 }
 
 /* Smooth page transitions */

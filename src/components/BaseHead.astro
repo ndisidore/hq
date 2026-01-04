@@ -3,7 +3,7 @@
 import '../styles/app.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, THEME_NAMES } from '../consts';
 
 interface Props {
 	title: string;
@@ -14,14 +14,16 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+const validThemes = THEME_NAMES;
 ---
 
 <!-- Theme initialization (prevents flash of unstyled content) -->
-<script is:inline>
+<script is:inline define:vars={{ validThemes }}>
   (function() {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'dracula' : 'light');
+    const defaultTheme = prefersDark ? 'dracula' : 'light';
+    const theme = (savedTheme && validThemes.includes(savedTheme)) ? savedTheme : defaultTheme;
     document.documentElement.setAttribute('data-theme', theme);
   })();
 </script>

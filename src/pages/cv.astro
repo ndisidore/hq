@@ -1,57 +1,100 @@
 ---
 import { Icon } from 'astro-icon/components';
 import BaseHead from '../components/BaseHead.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 
-// Define your CV data - customize these with your own information
 const experience = [
   {
-    title: 'Senior Software Engineer',
-    company: 'Company Name',
-    period: '2022 - Present',
+    id: 'pason-power',
+    title: 'Chief Cloud Architect & Full Stack Engineer',
+    company: 'Pason Power',
+    companyUrl: 'https://pasonpower.com',
+    location: 'Houston, TX',
+    period: 'June 2017 - Present',
     description:
-      'Description of your role and key achievements. Highlight impactful projects and technologies used.',
-    technologies: ['TypeScript', 'React', 'Node.js', 'AWS'],
+      'Established critical infrastructure including CI/CD and infrastructure-as-code. Designed onboarding systems managing 150+ configuration parameters. Led team expansion from 5 to 20 members.',
+    responsibilities: [
+      'Established critical infrastructure including CI deploys and infrastructure-as-code for auto-scaling instances',
+      'Designed onboarding and device commissioning processes managing 150+ configuration parameters with real-time async updates',
+      'Built data ingestion pipeline using IoT Core, Kinesis, and Redis for real-time data support',
+      'Championed modern web stack migration to Material UI, GraphQL, Babel, and Webpack',
+      'Collaborated with sales team on client demos, contributing to company growth from $0 to $1M+ annually',
+      'Led hiring efforts, growing engineering team from 5 to 20 people',
+    ],
+    technologies: ['GraphQL', 'Node.js', 'Python', 'PostgreSQL', 'AWS Lambda', 'DynamoDB', 'Kinesis', 'ECS', 'IoT Core', 'Redis', 'Material UI', 'Webpack'],
   },
   {
-    title: 'Software Engineer',
-    company: 'Previous Company',
-    period: '2019 - 2022',
+    id: 'knocki',
+    title: 'Full Stack Engineer',
+    company: 'Knocki',
+    companyUrl: 'https://knocki.com',
+    location: 'Houston, TX',
+    period: 'November 2016 - April 2017',
     description:
-      'Description of your role and accomplishments. Focus on growth and meaningful contributions.',
-    technologies: ['JavaScript', 'Vue.js', 'Python', 'PostgreSQL'],
+      'Co-architected serverless backend using Lambda and DynamoDB. Developed hardware OTA process and built admin dashboard with React.',
+    responsibilities: [
+      'Co-architected serverless backend using Express.js with Lambda, S3, DynamoDB, and CloudFront',
+      'Developed hardware OTA process for firmware management and staged device deployments',
+      'Built admin dashboard using React, Redux, and Webpack',
+      'Implemented secure device commissioning process with certificate management',
+    ],
+    technologies: ['Node.js', 'React', 'Redux', 'AWS Lambda', 'DynamoDB', 'CloudFormation', 'S3', 'CloudFront', 'Express.js'],
   },
   {
-    title: 'Junior Developer',
-    company: 'First Company',
-    period: '2017 - 2019',
-    description: 'Started your career here. Mention foundational skills learned and early wins.',
-    technologies: ['HTML', 'CSS', 'JavaScript', 'PHP'],
+    id: 'targeted-victory',
+    title: 'Full Stack DevOps Developer',
+    company: 'Targeted Victory',
+    location: 'Alexandria, VA',
+    period: 'September 2013 - November 2016',
+    description:
+      'Co-developed fundraising portal with REST API and OAuth. Managed server infrastructure reducing hosting costs by $20,000/month.',
+    responsibilities: [
+      'Co-developed in-house fundraising portal with REST API, OAuth, and secure payment processing',
+      'Introduced automated build processes using Grunt and MVC architecture with Backbone',
+      'Assumed server administration responsibilities for L.E.M.P. stack configuration and AWS EC2 management',
+      'Restructured system architecture for real-time monitoring and elastic load balancing, reducing monthly hosting costs by $20,000',
+    ],
+    technologies: ['PHP', 'Ruby on Rails', 'JavaScript', 'Backbone.js', 'AWS EC2', 'Docker', 'nginx', 'MySQL', 'Grunt'],
   },
 ];
 
 const education = [
   {
-    degree: 'M.S. Computer Science',
-    institution: 'University Name',
-    period: '2015 - 2017',
-    description: 'Specialized in distributed systems. Thesis on real-time data processing.',
+    degree: 'B.S. Computer Engineering',
+    institution: 'The University of Kansas',
+    location: 'Lawrence, KS',
+    period: 'May 2014',
+    description: "Cumulative GPA: 3.42 / Professional GPA: 3.50. Dean's List (4 semesters). Focus on Circuits, Networks, Programming, Embedded Systems, Operating Systems, and Digital Design.",
+  },
+];
+
+const speaking = [
+  {
+    title: 'The Babel Fix: Unifying APIs with Cloudflare Workers and AI',
+    event: 'Cloudflare Connect 2025',
+    location: 'Las Vegas, NV',
+    date: 'October 2025',
+    description:
+      'Presented strategies for streamlining API integrations using Cloudflare Workers for Platforms and Workflows. Demonstrated how AI-driven automation transforms fragmented API workflows into reliable, intelligent pipelines.',
   },
   {
-    degree: 'B.S. Computer Science',
-    institution: 'University Name',
-    period: '2011 - 2015',
-    description: 'Graduated with honors. Focus on software engineering and algorithms.',
+    title: 'AI on Demand: Serverless AI',
+    event: 'DevOps.js Conference',
+    location: 'Remote',
+    date: 'February 2024',
+    description:
+      'Delivered a hands-on workshop exploring serverless architecture applications in AI. Guided participants through building a RAG application using Workers AI, Vectorize, D1, and Cloudflare Workers.',
   },
 ];
 
 const skills = {
-  Languages: ['TypeScript', 'JavaScript', 'Python', 'Go', 'Rust'],
-  Frontend: ['React', 'Vue.js', 'Astro', 'Tailwind CSS', 'Next.js'],
-  Backend: ['Node.js', 'FastAPI', 'PostgreSQL', 'Redis', 'GraphQL'],
-  DevOps: ['Docker', 'Kubernetes', 'AWS', 'Cloudflare', 'GitHub Actions'],
+  Languages: ['Python', 'Rust', 'C/C++', 'Java', 'Ruby', 'JavaScript/ES6', 'Lua', 'Haskell'],
+  Web: ['Node.js', 'React', 'Redux', 'Express', 'GraphQL'],
+  Databases: ['PostgreSQL', 'MongoDB', 'DynamoDB'],
+  'Hardware & Infrastructure': ['Docker', 'AWS', 'PCB Design', 'Raspberry Pi', 'Arduino', 'Modbus'],
 };
 ---
 
@@ -73,34 +116,31 @@ const skills = {
           Experience
         </h2>
 
-        <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
-          {
-            experience.map((job, index) => (
-              <li>
-                {index > 0 && <hr class="bg-primary" />}
-                <div class="timeline-middle">
-                  <Icon name="tabler:circle-check" class="h-5 w-5 text-primary" />
-                </div>
-                <div
-                  class={`timeline-${index % 2 === 0 ? 'start' : 'end'} mb-10 ${index % 2 === 0 ? 'md:text-end' : ''}`}
-                >
-                  <time class="font-mono italic text-sm">{job.period}</time>
-                  <div class="text-lg font-black">{job.title}</div>
-                  <div class="text-primary font-semibold">{job.company}</div>
-                  <p class="mt-2 text-base-content/80">{job.description}</p>
-                  <div
-                    class={`flex flex-wrap gap-2 mt-3 ${index % 2 === 0 ? 'md:justify-end' : ''}`}
-                  >
-                    {job.technologies.map((tech) => (
-                      <span class="badge badge-sm badge-outline">{tech}</span>
-                    ))}
-                  </div>
-                </div>
-                {index < experience.length - 1 && <hr class="bg-primary" />}
-              </li>
-            ))
-          }
-        </ul>
+        <div class="relative">
+          <!-- Timeline line -->
+          <div
+            class="absolute left-[23px] w-0.5 bg-gradient-to-b from-primary/50 via-primary/30 to-primary/10 hidden md:block"
+            style="top: 44px; height: calc(100% - 88px);"
+          />
+
+          <div class="space-y-6">
+            {
+              experience.map((job) => (
+                <ExperienceCard
+                  id={job.id}
+                  title={job.title}
+                  company={job.company}
+                  companyUrl={job.companyUrl}
+                  location={job.location}
+                  period={job.period}
+                  description={job.description}
+                  responsibilities={job.responsibilities}
+                  technologies={job.technologies}
+                />
+              ))
+            }
+          </div>
+        </div>
       </section>
 
       <!-- Education Section -->
@@ -123,7 +163,7 @@ const skills = {
                 >
                   <time class="font-mono italic text-sm">{edu.period}</time>
                   <div class="text-lg font-black">{edu.degree}</div>
-                  <div class="text-secondary font-semibold">{edu.institution}</div>
+                  <div class="text-secondary font-semibold">{edu.institution} <span class="text-base-content/60 font-normal">| {edu.location}</span></div>
                   <p class="mt-2 text-base-content/80">{edu.description}</p>
                 </div>
                 {index < education.length - 1 && <hr class="bg-secondary" />}
@@ -131,6 +171,34 @@ const skills = {
             ))
           }
         </ul>
+      </section>
+
+      <!-- Speaking Section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <Icon name="tabler:microphone" class="h-6 w-6" />
+          Speaking & Events
+        </h2>
+
+        <div class="space-y-6">
+          {
+            speaking.map((talk) => (
+              <div class="card bg-base-200">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">{talk.title}</h3>
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                    <span class="text-primary font-semibold">{talk.event}</span>
+                    <span class="text-base-content/60">|</span>
+                    <span class="text-base-content/70">{talk.location}</span>
+                    <span class="text-base-content/60">|</span>
+                    <time class="font-mono italic text-base-content/70">{talk.date}</time>
+                  </div>
+                  <p class="mt-2 text-base-content/80">{talk.description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </section>
 
       <!-- Skills Section -->

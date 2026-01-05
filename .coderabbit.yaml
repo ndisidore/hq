@@ -134,6 +134,16 @@ reviews:
       enabled: true
     ast-grep:
       essential_rules: true
+    languagetool:
+      enabled: true
+      level: default
+      enabled_categories:
+        - TYPOS
+        - GRAMMAR
+        - PUNCTUATION
+      disabled_rules:
+        - EN_UNPAIRED_BRACKETS
+        - EN_UNPAIRED_QUOTES
 
 chat:
   auto_reply: true

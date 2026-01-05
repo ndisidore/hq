@@ -5,7 +5,7 @@ import { calculateReadingTime } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
   );
 
   return posts.map((post, index) => ({

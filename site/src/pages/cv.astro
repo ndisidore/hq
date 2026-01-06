@@ -7,6 +7,58 @@ import GroupedExperienceCard from '../components/GroupedExperienceCard.astro';
 import Header from '../components/Header.astro';
 import { getTechIcon, SITE_TITLE } from '../consts';
 
+const terminalIndustries = {
+  id: 'terminal-industries',
+  title: 'Principal Engineer',
+  company: 'Terminal Industries',
+  companyUrl: 'https://terminal-industries.com/',
+  location: 'Austin, TX',
+  period: 'Aug 2024 – Present',
+  description:
+    'Terminal Industries is reimagining global shipping and logistics using computer vision and edge computing.',
+  responsibilities: [
+    'Founding engineer responsible for bootstrapping core infrastructure using Terraform for multi-tenant IaC with Row-Level Security (RLS), supporting a Golang backend and a Python-based Vision Engine with GPU acceleration',
+    'Co-authored edge SRE Ansible playbooks to automate provisioning and fleet management of 100+ Axis cameras. Developed custom AXIS ACAPs integrating an OpenTelemetry collector and Tailscale client to ensure high observability and secure remote management',
+    'Designed and implemented a Temporal-backed workflow engine with modular actions, computer-vision triggers, CEL-based branching logic, and client-customizable configurations, enabling flexible automation of complex logistics workflows',
+    'Built CDC consumers using Debezium and Redpanda to power event-driven workflows, improving data synchronization and system responsiveness',
+    'Designed an extensible integration platform on Cloudflare Workers for Platforms, enabling tenants to deploy custom code and connectors in a secure, bring-your-own-compute model',
+    'Mentored junior engineers, delivered internal Slidev presentations on engineering best practices, and actively contributed to product strategy and technical leadership discussions',
+  ],
+  technologies: [
+    'Golang',
+    'Python',
+    'React',
+    'TanStack',
+    'Terraform',
+    'OpenTofu',
+    'Ansible',
+    'Computer Vision',
+    'GPU Acceleration',
+    'Temporal',
+    'CEL',
+    'OpenTelemetry',
+    'Tailscale',
+    'AXIS ACAP',
+    'Kubernetes',
+    'Cloudflare Workers',
+    'Prometheus',
+    'Grafana',
+    'GraphQL',
+    'Mise',
+    'GitHub Actions',
+    'AWS',
+    'AWS ECS',
+    'Kafka',
+    'Redpanda',
+    'DuckDB',
+    'DBT',
+    'CDC',
+    'PostgreSQL',
+    'Debezium',
+    'Claude Code',
+  ],
+};
+
 const cloudflare = {
   id: 'cloudflare',
   title: 'Senior Systems Engineer',
@@ -262,6 +314,17 @@ const skills = {
           />
 
           <div class="space-y-6">
+            <ExperienceCard
+              id={terminalIndustries.id}
+              title={terminalIndustries.title}
+              company={terminalIndustries.company}
+              companyUrl={terminalIndustries.companyUrl}
+              location={terminalIndustries.location}
+              period={terminalIndustries.period}
+              description={terminalIndustries.description}
+              responsibilities={terminalIndustries.responsibilities}
+              technologies={terminalIndustries.technologies}
+            />
             <GroupedExperienceCard
               id={cloudflare.id}
               title={cloudflare.title}

@@ -43,7 +43,30 @@ export const THEMES = [
 export const THEME_NAMES = THEMES.map((t) => t.name);
 
 // Technology name to icon mapping for experience/skills displays
+// Priority: logos > simple-icons > tabler (fallback)
 export const TECH_ICON_MAP: Record<string, string> = {
+  // Terminal Industries stack
+  TanStack: 'logos:react-query-icon',
+  OpenTofu: 'simple-icons:opentofu',
+  Ansible: 'logos:ansible',
+  'Computer Vision': 'tabler:eye-code',
+  'GPU Acceleration': 'tabler:cpu-2',
+  Temporal: 'simple-icons:temporal',
+  CEL: 'tabler:code',
+  OpenTelemetry: 'logos:opentelemetry-icon',
+  Tailscale: 'simple-icons:tailscale',
+  'AXIS ACAP': 'tabler:camera',
+  Grafana: 'logos:grafana',
+  Mise: 'tabler:tool',
+  'GitHub Actions': 'logos:github-actions',
+  'AWS ECS': 'logos:aws-ecs',
+  Redpanda: 'tabler:message-bolt',
+  DuckDB: 'simple-icons:duckdb',
+  DBT: 'logos:dbt-icon',
+  CDC: 'tabler:database-export',
+  Debezium: 'tabler:database-share',
+  'Claude Code': 'logos:claude-icon',
+  // Common
   GraphQL: 'logos:graphql',
   'Node.js': 'logos:nodejs-icon',
   Python: 'logos:python',
@@ -79,17 +102,17 @@ export const TECH_ICON_MAP: Record<string, string> = {
   Kubernetes: 'logos:kubernetes',
   Kafka: 'logos:kafka-icon',
   Prometheus: 'logos:prometheus',
-  VictoriaMetrics: 'tabler:chart-line',
-  Clickhouse: 'tabler:database',
+  VictoriaMetrics: 'simple-icons:victoriametrics',
+  Clickhouse: 'simple-icons:clickhouse',
   'Cloudflare Workers': 'logos:cloudflare-workers-icon',
   'C++': 'logos:c-plusplus',
   Rust: 'logos:rust',
   Protobuf: 'tabler:file-code',
   "Cap'n Proto": 'tabler:message-code',
-  Ceph: 'tabler:server',
+  Ceph: 'simple-icons:ceph',
   Buf: 'tabler:package',
   Quicksilver: 'tabler:bolt',
-  Parquet: 'tabler:file-type-doc',
+  Parquet: 'simple-icons:apacheparquet',
   R2: 'logos:cloudflare-icon',
   'IVF+PQ': 'tabler:vector',
   // Skills section

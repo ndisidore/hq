@@ -1,16 +1,21 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import TagList from '../../components/TagList.astro';
 import { SITE_TITLE } from '../../consts';
+import { getTagCounts } from '../../utils/tags';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const tagCounts = getTagCounts(posts);
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);
 ---
 
 <!doctype html>
@@ -21,10 +26,30 @@ const posts = (await getCollection('blog')).sort(
   <body class="min-h-screen flex flex-col">
     <Header />
     <main class="container mx-auto px-4 py-8 max-w-6xl flex-1">
-      <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
-        <h1 class="text-4xl font-bold">Blog</h1>
-        <a href="/tags" class="btn btn-outline btn-sm">Browse by tags</a>
-      </div>
+      <h1 class="text-4xl font-bold mb-6">Blog</h1>
+
+      <!-- Tags Filter -->
+      {sortedTags.length > 0 && (
+        <div class="card bg-base-200 mb-8">
+          <div class="card-body p-4">
+            <div class="flex items-center gap-2 mb-3">
+              <Icon name="tabler:tags" class="w-5 h-5 text-primary" />
+              <span class="font-medium text-sm">Filter by tag</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {sortedTags.map(([tag, count]) => (
+                <a
+                  href={`/tags/${tag}`}
+                  class="badge badge-accent gap-1.5 transition-opacity hover:opacity-80"
+                >
+                  {tag}
+                  <span class="badge badge-xs badge-neutral">{count}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {
         posts.length > 0 ? (

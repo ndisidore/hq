@@ -38,21 +38,26 @@ Tags have dedicated filter pages at `/tags/[tag]`. Tag utilities are in `src/uti
 
 ### Theming
 
-Two DaisyUI themes: "light" (default) and "dracula" (dark). Theme persistence uses localStorage with system preference fallback. The `ThemeToggle.astro` component handles switching. FOUC is prevented by an inline script in `BaseHead.astro` that sets the theme before render.
+Extensive theming support via DaisyUI. Theme persistence uses localStorage with system preference fallback. The `ThemeToggle.astro` component handles switching. FOUC is prevented by an inline script in `BaseHead.astro` that sets the theme before render.
 
 ### Icons
 
-Icons use [Iconify](https://iconify.design/) via `astro-icon` with the Tabler icon set:
+Icons use [Iconify](https://iconify.design/) via `astro-icon`. Three icon sets are installed:
+
+- `tabler:` - UI icons ([browse](https://icon-sets.iconify.design/tabler/))
+- `simple-icons:` - Brand icons ([browse](https://icon-sets.iconify.design/simple-icons/))
+- `logos:` - Tech/brand logos ([browse](https://icon-sets.iconify.design/logos/))
 
 ```astro
 ---
 import { Icon } from 'astro-icon/components';
 ---
 <Icon name="tabler:calendar" class="h-4 w-4" />
-<Icon name="tabler:brand-github" class="w-5 h-5" />
+<Icon name="simple-icons:github" class="w-5 h-5" />
+<Icon name="logos:astro-icon" class="w-6 h-6" />
 ```
 
-Browse icons at https://icon-sets.iconify.design/tabler/. To add other icon sets, install `@iconify-json/<set-name>`.
+To add other icon sets, install `@iconify-json/<set-name>`.
 
 ### Key Files
 

@@ -3,8 +3,96 @@ import { Icon } from 'astro-icon/components';
 import BaseHead from '../components/BaseHead.astro';
 import ExperienceCard from '../components/ExperienceCard.astro';
 import Footer from '../components/Footer.astro';
+import GroupedExperienceCard from '../components/GroupedExperienceCard.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import { getTechIcon, SITE_TITLE } from '../consts';
+
+const cloudflare = {
+  id: 'cloudflare',
+  title: 'Senior Systems Engineer',
+  company: 'Cloudflare',
+  companyUrl: 'https://cloudflare.com',
+  location: 'Austin, TX',
+  period: 'Dec 2019 – Aug 2024',
+  roles: [
+    {
+      id: 'cloudflare-workers-ai',
+      title: 'Workers AI / Vectorize',
+      period: 'May 2023 – Aug 2024',
+      description:
+        "Cloudflare's edge-native, serverless vector database powering AI products and embeddings workflows.",
+      responsibilities: [
+        'Designed and implemented a custom vector storage format optimized for document-store workloads using IVF+PQ search patterns, improving query efficiency at the edge',
+        'Built a custom metadata storage engine supporting low-latency index lookups on distributed edge nodes for real-time retrieval workloads',
+        'Developed a dynamic re-indexer that monitored index properties and load metrics to automatically re-compute and version indices in real time, ensuring sustained query performance',
+      ],
+      technologies: [
+        'Golang',
+        'Rust',
+        'TypeScript',
+        'Kubernetes',
+        'Docker',
+        'IVF+PQ',
+        'Parquet',
+        'R2',
+        'Cloudflare Workers',
+      ],
+    },
+    {
+      id: 'cloudflare-workers-core',
+      title: 'Workers Core Platform',
+      period: 'Mar 2022 – May 2023',
+      description:
+        'Managed the build pipeline and configuration systems for Cloudflare Workers.',
+      responsibilities: [
+        'Built and launched Workers for Platforms, extending the C++ V8 runtime to support dynamic resource allocation and runtime dispatch, enabling multi-tenant execution at scale',
+        "Implemented privileged binding support via Cap'n Proto RPC, enabling dynamic injection of bindings for trusted accounts and improving runtime security isolation",
+        'Expanded Workers edge storage from Quicksilver to a tiered system incorporating Ceph and external backends, improving scalability and data durability',
+      ],
+      technologies: [
+        'Golang',
+        'C++',
+        'Kubernetes',
+        'Docker',
+        'Buf',
+        'Protobuf',
+        "Cap'n Proto",
+        'Kafka',
+        'Prometheus',
+        'Clickhouse',
+        'Ceph',
+        'Quicksilver',
+        'PostgreSQL',
+        'Cloudflare Workers',
+      ],
+    },
+    {
+      id: 'cloudflare-internal-tools',
+      title: 'Internal Tools Team',
+      period: 'Dec 2019 – Mar 2022',
+      description:
+        'Cross-team abstractions used across Cloudflare, serving both internal developers and external product surfaces.',
+      responsibilities: [
+        "Architected and launched Cloudflare's customer alerting platform, enabling service-based alert dispatch with enriched context via VictoriaMetrics and Clickhouse. Implemented multi-window SLO burn-rate anomaly detection to improve incident responsiveness",
+        "Operated and optimized Cloudflare's Kafka-backed internal messaging system powering 300+ producers/consumers across 15 brokers, processing over 1T messages per day",
+        "Spearheaded the Search Engine Crawl Hints initiative with Microsoft and Yandex, integrating with Cloudflare's cache invalidation stack to reduce redundant crawls and network load",
+      ],
+      technologies: [
+        'Golang',
+        'Kubernetes',
+        'Docker',
+        'Redis',
+        'Kafka',
+        'Prometheus',
+        'VictoriaMetrics',
+        'Clickhouse',
+        'PostgreSQL',
+        'TypeScript',
+        'Cloudflare Workers',
+      ],
+    },
+  ],
+};
 
 const experience = [
   {
@@ -174,6 +262,15 @@ const skills = {
           />
 
           <div class="space-y-6">
+            <GroupedExperienceCard
+              id={cloudflare.id}
+              title={cloudflare.title}
+              company={cloudflare.company}
+              companyUrl={cloudflare.companyUrl}
+              location={cloudflare.location}
+              period={cloudflare.period}
+              roles={cloudflare.roles}
+            />
             {
               experience.map((job) => (
                 <ExperienceCard
@@ -266,7 +363,10 @@ const skills = {
                   <h3 class="card-title text-lg">{category}</h3>
                   <div class="flex flex-wrap gap-2">
                     {skillList.map((skill) => (
-                      <span class="badge badge-primary">{skill}</span>
+                      <span class="badge badge-primary badge-outline gap-1.5 bg-white">
+                        <Icon name={getTechIcon(skill)} class="w-4 h-4 text-black" />
+                        {skill}
+                      </span>
                     ))}
                   </div>
                 </div>

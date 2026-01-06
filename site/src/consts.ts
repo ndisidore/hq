@@ -74,4 +74,40 @@ export const TECH_ICON_MAP: Record<string, string> = {
   Grunt: 'logos:grunt',
   Terraform: 'logos:terraform-icon',
   CSS: 'logos:css-3',
+  // Cloudflare stack
+  Golang: 'logos:go',
+  Kubernetes: 'logos:kubernetes',
+  Kafka: 'logos:kafka-icon',
+  Prometheus: 'logos:prometheus',
+  VictoriaMetrics: 'tabler:chart-line',
+  Clickhouse: 'tabler:database',
+  'Cloudflare Workers': 'logos:cloudflare-workers-icon',
+  'C++': 'logos:c-plusplus',
+  Rust: 'logos:rust',
+  Protobuf: 'tabler:file-code',
+  "Cap'n Proto": 'tabler:message-code',
+  Ceph: 'tabler:server',
+  Buf: 'tabler:package',
+  Quicksilver: 'tabler:bolt',
+  Parquet: 'tabler:file-type-doc',
+  R2: 'logos:cloudflare-icon',
+  'IVF+PQ': 'tabler:vector',
+  // Skills section
+  'C/C++': 'logos:c',
+  Java: 'logos:java',
+  Ruby: 'logos:ruby',
+  'JavaScript/ES6': 'logos:javascript',
+  Lua: 'logos:lua',
+  Haskell: 'logos:haskell-icon',
+  Express: 'logos:express',
+  MongoDB: 'logos:mongodb-icon',
+  AWS: 'logos:aws',
+  'PCB Design': 'tabler:cpu',
+  'Raspberry Pi': 'logos:raspberry-pi',
+  Arduino: 'logos:arduino',
+  Modbus: 'tabler:plug-connected',
 };
+
+export function getTechIcon(tech: string): string {
+  return TECH_ICON_MAP[tech] || 'tabler:code';
+}

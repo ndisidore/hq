@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import BaseHead from '../components/BaseHead.astro';
 import ExperienceCard from '../components/ExperienceCard.astro';
@@ -6,233 +7,58 @@ import Footer from '../components/Footer.astro';
 import GroupedExperienceCard from '../components/GroupedExperienceCard.astro';
 import Header from '../components/Header.astro';
 import { getTechIcon, SITE_TITLE } from '../consts';
+import {
+  parseGroupedExperienceContent,
+  parseSingleExperienceContent,
+} from '../utils/mdx-sections';
 
-const terminalIndustries = {
-  id: 'terminal-industries',
-  title: 'Principal Engineer',
-  company: 'Terminal Industries',
-  companyUrl: 'https://terminal-industries.com/',
-  location: 'Austin, TX',
-  period: 'Aug 2024 – Present',
-  description:
-    'Terminal Industries is reimagining global shipping and logistics using computer vision and edge computing.',
-  responsibilities: [
-    'Founding engineer responsible for bootstrapping core infrastructure using Terraform for multi-tenant IaC with Row-Level Security (RLS), supporting a Golang backend and a Python-based Vision Engine with GPU acceleration',
-    'Co-authored edge SRE Ansible playbooks to automate provisioning and fleet management of 100+ Axis cameras. Developed custom AXIS ACAPs integrating an OpenTelemetry collector and Tailscale client to ensure high observability and secure remote management',
-    'Designed and implemented a Temporal-backed workflow engine with modular actions, computer-vision triggers, CEL-based branching logic, and client-customizable configurations, enabling flexible automation of complex logistics workflows',
-    'Built CDC consumers using Debezium and Redpanda to power event-driven workflows, improving data synchronization and system responsiveness',
-    'Designed an extensible integration platform on Cloudflare Workers for Platforms, enabling tenants to deploy custom code and connectors in a secure, bring-your-own-compute model',
-    'Mentored junior engineers, delivered internal Slidev presentations on engineering best practices, and actively contributed to product strategy and technical leadership discussions',
-  ],
-  technologies: [
-    'Golang',
-    'Python',
-    'React',
-    'TanStack',
-    'Terraform',
-    'OpenTofu',
-    'Ansible',
-    'Computer Vision',
-    'GPU Acceleration',
-    'Temporal',
-    'CEL',
-    'OpenTelemetry',
-    'Tailscale',
-    'AXIS ACAP',
-    'Kubernetes',
-    'Cloudflare Workers',
-    'Prometheus',
-    'Grafana',
-    'GraphQL',
-    'Mise',
-    'GitHub Actions',
-    'AWS',
-    'AWS ECS',
-    'Kafka',
-    'Redpanda',
-    'DuckDB',
-    'DBT',
-    'CDC',
-    'PostgreSQL',
-    'Debezium',
-    'Claude Code',
-  ],
-};
+// Fetch and sort experience entries (higher order = more recent)
+const experienceEntries = (await getCollection('experience')).sort(
+  (a, b) => b.data.order - a.data.order,
+);
 
-const cloudflare = {
-  id: 'cloudflare',
-  title: 'Senior Systems Engineer',
-  company: 'Cloudflare',
-  companyUrl: 'https://cloudflare.com',
-  location: 'Austin, TX',
-  period: 'Dec 2019 – Aug 2024',
-  roles: [
-    {
-      id: 'cloudflare-workers-ai',
-      title: 'Workers AI / Vectorize',
-      period: 'May 2023 – Aug 2024',
-      description:
-        "Cloudflare's edge-native, serverless vector database powering AI products and embeddings workflows.",
-      responsibilities: [
-        'Designed and implemented a custom vector storage format optimized for document-store workloads using IVF+PQ search patterns, improving query efficiency at the edge',
-        'Built a custom metadata storage engine supporting low-latency index lookups on distributed edge nodes for real-time retrieval workloads',
-        'Developed a dynamic re-indexer that monitored index properties and load metrics to automatically re-compute and version indices in real time, ensuring sustained query performance',
-      ],
-      technologies: [
-        'Golang',
-        'Rust',
-        'TypeScript',
-        'Kubernetes',
-        'Docker',
-        'IVF+PQ',
-        'Parquet',
-        'R2',
-        'Cloudflare Workers',
-      ],
-    },
-    {
-      id: 'cloudflare-workers-core',
-      title: 'Workers Core Platform',
-      period: 'Mar 2022 – May 2023',
-      description:
-        'Managed the build pipeline and configuration systems for Cloudflare Workers.',
-      responsibilities: [
-        'Built and launched Workers for Platforms, extending the C++ V8 runtime to support dynamic resource allocation and runtime dispatch, enabling multi-tenant execution at scale',
-        "Implemented privileged binding support via Cap'n Proto RPC, enabling dynamic injection of bindings for trusted accounts and improving runtime security isolation",
-        'Expanded Workers edge storage from Quicksilver to a tiered system incorporating Ceph and external backends, improving scalability and data durability',
-      ],
-      technologies: [
-        'Golang',
-        'C++',
-        'Kubernetes',
-        'Docker',
-        'Buf',
-        'Protobuf',
-        "Cap'n Proto",
-        'Kafka',
-        'Prometheus',
-        'Clickhouse',
-        'Ceph',
-        'Quicksilver',
-        'PostgreSQL',
-        'Cloudflare Workers',
-      ],
-    },
-    {
-      id: 'cloudflare-internal-tools',
-      title: 'Internal Tools Team',
-      period: 'Dec 2019 – Mar 2022',
-      description:
-        'Cross-team abstractions used across Cloudflare, serving both internal developers and external product surfaces.',
-      responsibilities: [
-        "Architected and launched Cloudflare's customer alerting platform, enabling service-based alert dispatch with enriched context via VictoriaMetrics and Clickhouse. Implemented multi-window SLO burn-rate anomaly detection to improve incident responsiveness",
-        "Operated and optimized Cloudflare's Kafka-backed internal messaging system powering 300+ producers/consumers across 15 brokers, processing over 1T messages per day",
-        "Spearheaded the Search Engine Crawl Hints initiative with Microsoft and Yandex, integrating with Cloudflare's cache invalidation stack to reduce redundant crawls and network load",
-      ],
-      technologies: [
-        'Golang',
-        'Kubernetes',
-        'Docker',
-        'Redis',
-        'Kafka',
-        'Prometheus',
-        'VictoriaMetrics',
-        'Clickhouse',
-        'PostgreSQL',
-        'TypeScript',
-        'Cloudflare Workers',
-      ],
-    },
-  ],
-};
+// Process each entry to extract content sections from MDX body
+const processedExperience = experienceEntries.map((entry) => {
+  const { data, body } = entry;
 
-const experience = [
-  {
-    id: 'pason-power',
-    title: 'Chief Cloud Architect & Full Stack Engineer',
-    company: 'Pason Power',
-    companyUrl: 'https://pasonpower.com',
-    location: 'Houston, TX',
-    period: 'June 2017 - Present',
-    description:
-      'Established critical infrastructure including CI/CD and infrastructure-as-code. Designed onboarding systems managing 150+ configuration parameters. Led team expansion from 5 to 20 members.',
-    responsibilities: [
-      'Established critical infrastructure including CI deploys and infrastructure-as-code for auto-scaling instances',
-      'Designed onboarding and device commissioning processes managing 150+ configuration parameters with real-time async updates',
-      'Built data ingestion pipeline using IoT Core, Kinesis, and Redis for real-time data support',
-      'Championed modern web stack migration to Material UI, GraphQL, Babel, and Webpack',
-      'Collaborated with sales team on client demos, contributing to company growth from $0 to $1M+ annually',
-      'Led hiring efforts, growing engineering team from 5 to 20 people',
-    ],
-    technologies: [
-      'GraphQL',
-      'Node.js',
-      'Python',
-      'PostgreSQL',
-      'AWS Lambda',
-      'DynamoDB',
-      'Kinesis',
-      'ECS',
-      'IoT Core',
-      'Redis',
-      'Material UI',
-      'Webpack',
-    ],
-  },
-  {
-    id: 'knocki',
-    title: 'Full Stack Engineer',
-    company: 'Knocki',
-    companyUrl: 'https://knocki.com',
-    location: 'Houston, TX',
-    period: 'November 2016 - April 2017',
-    description:
-      'Co-architected serverless backend using Lambda and DynamoDB. Developed hardware OTA process and built admin dashboard with React.',
-    responsibilities: [
-      'Co-architected serverless backend using Express.js with Lambda, S3, DynamoDB, and CloudFront',
-      'Developed hardware OTA process for firmware management and staged device deployments',
-      'Built admin dashboard using React, Redux, and Webpack',
-      'Implemented secure device commissioning process with certificate management',
-    ],
-    technologies: [
-      'Node.js',
-      'React',
-      'Redux',
-      'AWS Lambda',
-      'DynamoDB',
-      'CloudFormation',
-      'S3',
-      'CloudFront',
-      'Express.js',
-    ],
-  },
-  {
-    id: 'targeted-victory',
-    title: 'Full Stack DevOps Developer',
-    company: 'Targeted Victory',
-    location: 'Alexandria, VA',
-    period: 'September 2013 - November 2016',
-    description:
-      'Co-developed fundraising portal with REST API and OAuth. Managed server infrastructure reducing hosting costs by $20,000/month.',
-    responsibilities: [
-      'Co-developed in-house fundraising portal with REST API, OAuth, and secure payment processing',
-      'Introduced automated build processes using Grunt and MVC architecture with Backbone',
-      'Assumed server administration responsibilities for L.E.M.P. stack configuration and AWS EC2 management',
-      'Restructured system architecture for real-time monitoring and elastic load balancing, reducing monthly hosting costs by $20,000',
-    ],
-    technologies: [
-      'PHP',
-      'Ruby on Rails',
-      'JavaScript',
-      'Backbone.js',
-      'AWS EC2',
-      'Docker',
-      'nginx',
-      'MySQL',
-      'Grunt',
-    ],
-  },
-];
+  if (data.type === 'grouped' && data.roles) {
+    // Parse grouped experience - extract per-role content from MDX body
+    const roleContent = parseGroupedExperienceContent(body || '');
+
+    const processedRoles = data.roles.map((role) => ({
+      ...role,
+      description: roleContent[role.id]?.summary || '',
+      responsibilities: roleContent[role.id]?.details || [],
+    }));
+
+    return {
+      type: 'grouped' as const,
+      id: data.id,
+      title: data.title,
+      company: data.company,
+      companyUrl: data.companyUrl,
+      location: data.location,
+      period: data.period,
+      roles: processedRoles,
+    };
+  }
+
+  // Parse single experience
+  const content = parseSingleExperienceContent(body || '');
+
+  return {
+    type: 'single' as const,
+    id: data.id,
+    title: data.title,
+    company: data.company,
+    companyUrl: data.companyUrl,
+    location: data.location,
+    period: data.period,
+    description: content.summary,
+    responsibilities: content.details,
+    technologies: data.technologies,
+  };
+});
 
 const education = [
   {
@@ -314,40 +140,32 @@ const skills = {
           />
 
           <div class="space-y-6">
-            <ExperienceCard
-              id={terminalIndustries.id}
-              title={terminalIndustries.title}
-              company={terminalIndustries.company}
-              companyUrl={terminalIndustries.companyUrl}
-              location={terminalIndustries.location}
-              period={terminalIndustries.period}
-              description={terminalIndustries.description}
-              responsibilities={terminalIndustries.responsibilities}
-              technologies={terminalIndustries.technologies}
-            />
-            <GroupedExperienceCard
-              id={cloudflare.id}
-              title={cloudflare.title}
-              company={cloudflare.company}
-              companyUrl={cloudflare.companyUrl}
-              location={cloudflare.location}
-              period={cloudflare.period}
-              roles={cloudflare.roles}
-            />
             {
-              experience.map((job) => (
-                <ExperienceCard
-                  id={job.id}
-                  title={job.title}
-                  company={job.company}
-                  companyUrl={job.companyUrl}
-                  location={job.location}
-                  period={job.period}
-                  description={job.description}
-                  responsibilities={job.responsibilities}
-                  technologies={job.technologies}
-                />
-              ))
+              processedExperience.map((exp) =>
+                exp.type === 'grouped' ? (
+                  <GroupedExperienceCard
+                    id={exp.id}
+                    title={exp.title}
+                    company={exp.company}
+                    companyUrl={exp.companyUrl}
+                    location={exp.location}
+                    period={exp.period}
+                    roles={exp.roles}
+                  />
+                ) : (
+                  <ExperienceCard
+                    id={exp.id}
+                    title={exp.title}
+                    company={exp.company}
+                    companyUrl={exp.companyUrl}
+                    location={exp.location}
+                    period={exp.period}
+                    description={exp.description}
+                    responsibilities={exp.responsibilities}
+                    technologies={exp.technologies}
+                  />
+                )
+              )
             }
           </div>
         </div>

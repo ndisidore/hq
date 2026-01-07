@@ -32,7 +32,12 @@ jobs:
       - name: Run markdownlint
         run: markdownlint 'src/content/blog/**/*.md' --config .markdownlint.json
 
-      - name: Run Harper grammar check
+      - name: Run Harper grammar check (blog)
         # TODO: Remove continue-on-error once placeholder Lorem Ipsum content is replaced
         continue-on-error: true
-        run: ./scripts/grammar-check.sh
+        run: ./scripts/grammar-check.sh src/content/blog/*.md
+
+      - name: Run Harper grammar check (CV)
+        # Allow grammar warnings during initial CV content rollout
+        continue-on-error: true
+        run: ./scripts/grammar-check.sh src/content/cv/experience/*.mdx

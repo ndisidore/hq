@@ -86,13 +86,23 @@ reviews:
         - Valid internal links
         - Consistent formatting
 
-    - path: 'site/src/content/**/*.mdx'
+    - path: 'site/src/content/blog/**/*.mdx'
       instructions: |
-        Review MDX content for:
-        - Valid frontmatter matching the content schema
+        Review MDX blog content for:
+        - Valid frontmatter matching the content schema (title, description, pubDate, tags)
         - Proper import statements for components
         - Correct component usage within markdown
         - Accessibility of interactive elements
+
+    - path: 'site/src/content/cv/experience/**/*.mdx'
+      instructions: |
+        Review CV experience MDX content for:
+        - Valid frontmatter matching schema (id, title, company, location, period, order, type, technologies)
+        - For grouped positions: roles array with id, title, period, technologies per role
+        - MDX body structure: ## Summary and ## Details sections for single positions
+        - For grouped: ## {role-id} sections with ### Summary and ### Details subsections
+        - Role IDs in MDX body must match the id fields in the roles frontmatter array
+        - Details section should be a markdown list (- item)
 
     - path: 'site/src/styles/**/*.css'
       instructions: |

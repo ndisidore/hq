@@ -1,7 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface BreadcrumbItem {
   label: string;
   href?: string;
+  icon?: string;
 }
 
 interface Props {
@@ -17,9 +20,15 @@ const { items } = Astro.props;
       items.map((item, index) => (
         <li>
           {item.href && index < items.length - 1 ? (
-            <a href={item.href}>{item.label}</a>
+            <a href={item.href} class="flex items-center gap-1">
+              {item.icon && <Icon name={item.icon} class="h-4 w-4 shrink-0" />}
+              {item.label}
+            </a>
           ) : (
-            <span class="truncate max-w-[200px]">{item.label}</span>
+            <span class="truncate max-w-[200px] flex items-center gap-1">
+              {item.icon && <Icon name={item.icon} class="h-4 w-4 shrink-0" />}
+              {item.label}
+            </span>
           )}
         </li>
       ))

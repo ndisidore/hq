@@ -5,6 +5,13 @@ import avatar from '../assets/logos/diz-rocks-avatar.svg';
 import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
+
+const navItems = [
+  { href: '/', label: 'Home', icon: 'tabler:home' },
+  { href: '/blog', label: 'Blog', icon: 'tabler:news' },
+  { href: '/cv', label: 'CV', icon: 'tabler:user-code' },
+  { href: '/about', label: 'About', icon: 'tabler:user-square' },
+];
 ---
 
 <header class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
@@ -17,10 +24,16 @@ import ThemeToggle from './ThemeToggle.astro';
         tabindex="0"
         class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
       >
-        <li><a href="/">Home</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="/cv">CV</a></li>
-        <li><a href="/about">About</a></li>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="flex items-center gap-2">
+                <Icon name={item.icon} class="h-4 w-4" />
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
     <a href="/" class="btn btn-ghost text-xl gap-2">
@@ -30,11 +43,16 @@ import ThemeToggle from './ThemeToggle.astro';
   </div>
 
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-      <li><HeaderLink href="/">Home</HeaderLink></li>
-      <li><HeaderLink href="/blog">Blog</HeaderLink></li>
-      <li><HeaderLink href="/cv">CV</HeaderLink></li>
-      <li><HeaderLink href="/about">About</HeaderLink></li>
+    <ul class="menu menu-horizontal gap-2">
+      {
+        navItems.map((item) => (
+          <li>
+            <HeaderLink href={item.href} icon={item.icon}>
+              {item.label}
+            </HeaderLink>
+          </li>
+        ))
+      }
     </ul>
   </div>
 

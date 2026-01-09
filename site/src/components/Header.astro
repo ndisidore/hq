@@ -10,7 +10,12 @@ const navItems = [
   { href: '/', label: 'Home', icon: 'tabler:home' },
   { href: '/blog', label: 'Blog', icon: 'tabler:news' },
   { href: '/cv', label: 'CV', icon: 'tabler:user-code' },
-  { href: '/about', label: 'About', icon: 'tabler:user-square' },
+];
+
+const aboutItems = [
+  { href: '/about', label: 'About', icon: 'tabler:user' },
+  { href: '/uses', label: 'Uses', icon: 'tabler:tool' },
+  { href: '/now', label: 'Now', icon: 'tabler:clock-hour-4' },
 ];
 ---
 
@@ -34,6 +39,29 @@ const navItems = [
             </li>
           ))
         }
+        <li class="dropdown">
+          <div tabindex="0" role="button" class="flex items-center gap-2">
+            <Icon name="tabler:user" class="h-4 w-4" />
+            About
+            <Icon name="tabler:chevron-down" class="h-3 w-3" />
+          </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box shadow-lg p-2 min-w-32 z-[2]">
+            {
+              aboutItems.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="flex items-center gap-2"
+                    onclick="document.activeElement?.blur()"
+                  >
+                    <Icon name={item.icon} class="h-4 w-4" />
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </li>
       </ul>
     </div>
     <a href="/" class="btn btn-ghost text-xl gap-2">
@@ -53,6 +81,29 @@ const navItems = [
           </li>
         ))
       }
+      <li class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="flex items-center gap-2 cursor-pointer">
+          <Icon name="tabler:user" class="h-4 w-4" />
+          About
+          <Icon name="tabler:chevron-down" class="h-3 w-3" />
+        </div>
+        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box shadow-lg p-2 min-w-32 z-[1]">
+          {
+            aboutItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="flex items-center gap-2"
+                  onclick="document.activeElement?.blur()"
+                >
+                  <Icon name={item.icon} class="h-4 w-4" />
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </li>
     </ul>
   </div>
 
@@ -69,3 +120,15 @@ const navItems = [
     </a>
   </div>
 </header>
+
+<script>
+  // Close dropdowns on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const active = document.activeElement as HTMLElement;
+      if (active?.closest('.dropdown')) {
+        active.blur();
+      }
+    }
+  });
+</script>

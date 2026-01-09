@@ -25,7 +25,7 @@ const recentPosts = (await getCollection('blog'))
     <Header />
     <main class="flex-1">
       <!-- Hero Section -->
-      <section class="hero min-h-[60vh] bg-base-200">
+      <section class="hero min-h-[60vh] bg-base-200 hero-interactive" id="hero">
         <div class="hero-content flex-col lg:flex-row-reverse gap-8 lg:gap-16 py-12">
           <!-- Logo -->
           <div class="flex-shrink-0">
@@ -95,7 +95,8 @@ const recentPosts = (await getCollection('blog'))
           {
             recentPosts.map((post, index) => (
               <article
-                class={`card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow ${index === 0 ? 'md:col-span-2' : ''}`}
+                class={`card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow animate-on-scroll ${index === 0 ? 'md:col-span-2' : ''}`}
+                style={`--delay: ${index * 100}ms`}
               >
                 {post.data.heroImage && (
                   <figure>
@@ -159,11 +160,9 @@ const recentPosts = (await getCollection('blog'))
         }
       }
 
-      // Initial update
       updateLogo();
 
-      // Watch for theme changes
-      const observer = new MutationObserver((mutations) => {
+      const themeObserver = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
           if (mutation.attributeName === 'data-theme') {
             updateLogo();
@@ -171,7 +170,21 @@ const recentPosts = (await getCollection('blog'))
         }
       });
 
-      observer.observe(document.documentElement, { attributes: true });
+      themeObserver.observe(document.documentElement, { attributes: true });
+
+      // Mouse-tracking hero effect
+      const hero = document.getElementById('hero');
+      if (hero) {
+        hero.addEventListener('mouseenter', () => hero.classList.add('active'));
+        hero.addEventListener('mouseleave', () => hero.classList.remove('active'));
+        hero.addEventListener('mousemove', (e) => {
+          const rect = hero.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          hero.style.setProperty('--mouse-x', `${x}%`);
+          hero.style.setProperty('--mouse-y', `${y}%`);
+        });
+      }
     </script>
   </body>
 </html>

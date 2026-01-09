@@ -1,0 +1,75 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const lastUpdated = 'January 2026';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Now | ${SITE_TITLE}`} description="What I'm currently focused on" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-3xl flex-1">
+      <div class="animate-on-scroll">
+        <h1 class="text-4xl font-bold mb-4">Now</h1>
+        <p class="text-base-content/70 mb-8">
+          A snapshot of what I'm currently focused on. Inspired by
+          <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" class="link link-primary">nownownow.com</a>.
+        </p>
+      </div>
+
+      <div class="prose prose-lg max-w-none">
+        <section class="animate-on-scroll" style="--delay: 100ms">
+          <h2>Building</h2>
+          <p>
+            Working on interesting problems at the intersection of infrastructure and developer experience.
+            Currently exploring how AI can augment development workflows without replacing the joy of building.
+          </p>
+          <p>
+            This site is an ongoing project - always tweaking the design and adding new sections.
+            Recently added the <a href="/uses">uses</a> page and some subtle interactive touches.
+          </p>
+        </section>
+
+        <section class="animate-on-scroll" style="--delay: 200ms">
+          <h2>Learning</h2>
+          <ul>
+            <li>Deepening my understanding of distributed systems patterns</li>
+            <li>Exploring the Rust ecosystem for systems programming</li>
+            <li>Experimenting with local-first software architectures</li>
+          </ul>
+        </section>
+
+        <section class="animate-on-scroll" style="--delay: 300ms">
+          <h2>Reading</h2>
+          <p>
+            Currently rotating between technical papers on consensus algorithms and science fiction.
+            Always open to recommendations.
+          </p>
+        </section>
+
+        <section class="animate-on-scroll" style="--delay: 400ms">
+          <h2>Outside of Work</h2>
+          <p>
+            When I'm not at the keyboard, you'll find me tinkering with hardware projects,
+            exploring the outdoors, or enjoying time with family.
+          </p>
+        </section>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-base-content/10 text-center text-base-content/50 animate-on-scroll" style="--delay: 500ms">
+        <p>Last updated: {lastUpdated}</p>
+        <p class="text-sm mt-2">
+          This is a <a href="https://nownownow.com" target="_blank" rel="noopener noreferrer" class="link">/now page</a>.
+          If you have your own site, consider making one too.
+        </p>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

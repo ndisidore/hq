@@ -212,3 +212,58 @@ html[data-theme="dracula"] .shiki span {
 @view-transition {
   navigation: auto;
 }
+
+/* Scroll animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+  transition-delay: var(--delay, 0ms);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mouse-tracking hero effect */
+.hero-interactive {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    260px circle at var(--mouse-x) var(--mouse-y),
+    color-mix(in oklch, var(--color-base-content) 12%, transparent),
+    color-mix(in oklch, var(--color-neutral) 6%, transparent) 50%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.hero-interactive.active::before {
+  opacity: 1;
+}
+
+.hero-interactive > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Disable on touch devices for performance */
+@media (hover: none) {
+  .hero-interactive::before {
+    display: none;
+  }
+}

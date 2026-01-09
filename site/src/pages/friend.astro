@@ -1,0 +1,130 @@
+---
+import doorsOfDurin from '../assets/images/doors-of-durin.svg';
+import BaseHead from '../components/BaseHead.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Friend | ${SITE_TITLE}`} description="Speak friend and enter" />
+    <style>
+      .doors-container {
+        background-color: #1a1a2e;
+      }
+      .doors-svg {
+        filter: drop-shadow(0 0 20px rgba(147, 197, 253, 0.3));
+      }
+      .listening {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body class="m-0 p-0 overflow-hidden">
+    <div class="doors-container h-screen w-screen flex flex-col items-center justify-center gap-8">
+      <img
+        src={doorsOfDurin.src}
+        alt="Doors of Durin"
+        class="doors-svg object-contain"
+        style="height: 85vh; width: auto;"
+      />
+      <p id="prompt-text" class="text-2xl md:text-4xl text-blue-200 font-serif text-center px-4">
+        Speak friend and enter
+      </p>
+      <div id="speech-controls" class="flex flex-col items-center gap-2">
+        <button
+          id="listen-btn"
+          class="btn btn-outline btn-primary text-lg"
+        >
+          Begin Listening
+        </button>
+        <p id="status" class="text-sm text-gray-400 h-6"></p>
+      </div>
+      <div id="fallback-controls" class="hidden flex flex-col items-center gap-2">
+        <button
+          id="enter-btn"
+          class="btn btn-outline btn-primary text-lg"
+        >
+          Enter
+        </button>
+        <p class="text-sm text-gray-400 italic">Speech recognition available on supported browsers</p>
+      </div>
+    </div>
+
+    <script>
+      const listenBtn = document.getElementById('listen-btn') as HTMLButtonElement;
+      const statusEl = document.getElementById('status') as HTMLParagraphElement;
+      const promptText = document.getElementById('prompt-text') as HTMLParagraphElement;
+      const speechControls = document.getElementById('speech-controls') as HTMLDivElement;
+      const fallbackControls = document.getElementById('fallback-controls') as HTMLDivElement;
+      const enterBtn = document.getElementById('enter-btn') as HTMLButtonElement;
+
+      // Check for browser support
+      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        speechControls.classList.add('hidden');
+        fallbackControls.classList.remove('hidden');
+        enterBtn.addEventListener('click', () => {
+          console.log('Enter clicked (fallback)');
+        });
+      } else {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        let isListening = false;
+
+        listenBtn.addEventListener('click', () => {
+          if (isListening) {
+            recognition.stop();
+          } else {
+            recognition.start();
+          }
+        });
+
+        recognition.onstart = () => {
+          isListening = true;
+          listenBtn.textContent = 'Stop Listening';
+          listenBtn.classList.add('btn-error');
+          listenBtn.classList.remove('btn-primary');
+          promptText.classList.add('listening');
+          statusEl.textContent = 'Listening...';
+        };
+
+        recognition.onend = () => {
+          isListening = false;
+          listenBtn.textContent = 'Begin Listening';
+          listenBtn.classList.remove('btn-error');
+          listenBtn.classList.add('btn-primary');
+          promptText.classList.remove('listening');
+          statusEl.textContent = '';
+        };
+
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
+          const results = Array.from(event.results);
+          const transcript = results
+            .map((result) => result[0].transcript)
+            .join('');
+
+          console.log('Speech result:', transcript);
+          statusEl.textContent = `Heard: "${transcript}"`;
+        };
+
+        recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+          console.error('Speech recognition error:', event.error);
+          statusEl.textContent = `Error: ${event.error}`;
+        };
+      }
+    </script>
+  </body>
+</html>

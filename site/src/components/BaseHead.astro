@@ -66,3 +66,29 @@ const validThemes = THEME_NAMES;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Global scroll animations -->
+<script>
+  function initScrollAnimations() {
+    const animateElements = document.querySelectorAll('.animate-on-scroll:not(.visible)');
+
+    const scrollObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            scrollObserver.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    for (const el of animateElements) {
+      scrollObserver.observe(el);
+    }
+  }
+
+  initScrollAnimations();
+  document.addEventListener('astro:page-load', initScrollAnimations);
+</script>

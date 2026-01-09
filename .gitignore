@@ -11,3 +11,6 @@
 
 # claude files
 .claude/
+
+# mcp files
+.playwright-mcp/

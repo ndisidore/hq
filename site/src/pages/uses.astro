@@ -1,0 +1,241 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+interface UsesItem {
+  name: string;
+  description: string;
+  icon?: string;
+  link?: string;
+}
+
+interface UsesCategory {
+  title: string;
+  icon: string;
+  items: UsesItem[];
+  span?: 'wide' | 'tall' | 'large';
+}
+
+const categories: UsesCategory[] = [
+  {
+    title: 'Editor & IDE',
+    icon: 'tabler:code',
+    span: 'large',
+    items: [
+      {
+        name: 'VS Code',
+        description: 'Primary editor with Vim keybindings',
+        icon: 'logos:visual-studio-code',
+        link: 'https://code.visualstudio.com/',
+      },
+      {
+        name: 'Neovim',
+        description: 'For quick edits and terminal work',
+        icon: 'logos:neovim',
+        link: 'https://neovim.io/',
+      },
+      {
+        name: 'JetBrains IDEs',
+        description: 'GoLand for Go, IntelliJ for Java',
+        icon: 'logos:jetbrains',
+        link: 'https://www.jetbrains.com/',
+      },
+    ],
+  },
+  {
+    title: 'Terminal',
+    icon: 'tabler:terminal-2',
+    items: [
+      {
+        name: 'Kitty',
+        description: 'GPU-accelerated terminal',
+        icon: 'tabler:brand-open-source',
+        link: 'https://sw.kovidgoyal.net/kitty/',
+      },
+      {
+        name: 'Fish Shell',
+        description: 'Friendly interactive shell',
+        icon: 'tabler:fish',
+        link: 'https://fishshell.com/',
+      },
+      {
+        name: 'Starship',
+        description: 'Cross-shell prompt',
+        icon: 'tabler:rocket',
+        link: 'https://starship.rs/',
+      },
+    ],
+  },
+  {
+    title: 'Dev Tools',
+    icon: 'tabler:tool',
+    span: 'wide',
+    items: [
+      {
+        name: 'mise',
+        description: 'Polyglot tool version manager',
+        icon: 'tabler:tool',
+        link: 'https://mise.jdx.dev/',
+      },
+      {
+        name: 'Docker',
+        description: 'Containerization',
+        icon: 'logos:docker-icon',
+        link: 'https://www.docker.com/',
+      },
+      {
+        name: 'Git',
+        description: 'Version control',
+        icon: 'logos:git-icon',
+        link: 'https://git-scm.com/',
+      },
+      {
+        name: 'Claude Code',
+        description: 'AI-powered coding assistant',
+        icon: 'logos:claude-icon',
+        link: 'https://claude.ai/code',
+      },
+    ],
+  },
+  {
+    title: 'This Site',
+    icon: 'tabler:world',
+    span: 'wide',
+    items: [
+      {
+        name: 'Astro',
+        description: 'Static site generator',
+        icon: 'logos:astro-icon',
+        link: 'https://astro.build/',
+      },
+      {
+        name: 'Tailwind CSS',
+        description: 'Utility-first CSS',
+        icon: 'logos:tailwindcss-icon',
+        link: 'https://tailwindcss.com/',
+      },
+      {
+        name: 'DaisyUI',
+        description: 'Component library',
+        icon: 'logos:daisyui-icon',
+        link: 'https://daisyui.com/',
+      },
+      {
+        name: 'Cloudflare Workers',
+        description: 'Edge deployment',
+        icon: 'logos:cloudflare-workers-icon',
+        link: 'https://workers.cloudflare.com/',
+      },
+    ],
+  },
+  {
+    title: 'Hardware',
+    icon: 'tabler:device-desktop',
+    items: [
+      {
+        name: 'Custom PC',
+        description: 'AMD Ryzen 9, RTX 4080',
+        icon: 'tabler:cpu',
+      },
+      {
+        name: 'Framework Laptop',
+        description: 'Modular and repairable',
+        icon: 'tabler:device-laptop',
+        link: 'https://frame.work/',
+      },
+      {
+        name: 'Keychron Q1',
+        description: 'Mechanical keyboard',
+        icon: 'tabler:keyboard',
+        link: 'https://www.keychron.com/',
+      },
+    ],
+  },
+];
+
+function getSpanClasses(span?: 'wide' | 'tall' | 'large'): string {
+  switch (span) {
+    case 'wide':
+      return 'md:col-span-2';
+    case 'tall':
+      return 'md:row-span-2';
+    case 'large':
+      return 'md:col-span-2 md:row-span-2';
+    default:
+      return '';
+  }
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Uses | ${SITE_TITLE}`} description="Software, tools, and hardware I use daily" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-6xl flex-1">
+      <div class="mb-12 animate-on-scroll">
+        <h1 class="text-4xl font-bold mb-4">Uses</h1>
+        <p class="text-lg text-base-content/70">
+          A living document of the software, tools, and hardware I use for development and beyond.
+          Inspired by <a href="https://uses.tech" target="_blank" rel="noopener noreferrer" class="link link-primary">uses.tech</a>.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-min">
+        {
+          categories.map((category, index) => (
+            <div
+              class={`card bg-base-100 shadow-xl group hover:shadow-2xl transition-all duration-300 animate-on-scroll ${getSpanClasses(category.span)}`}
+              style={`--delay: ${index * 100}ms`}
+            >
+              <div class="card-body">
+                <h2 class="card-title flex items-center gap-2 text-xl">
+                  <Icon name={category.icon} class="w-6 h-6 text-primary" aria-hidden="true" />
+                  {category.title}
+                </h2>
+                <ul class="space-y-4 mt-4">
+                  {category.items.map((item) => (
+                    <li class="flex items-start gap-3 group/item">
+                      {item.icon && (
+                        <Icon
+                          name={item.icon}
+                          class="w-5 h-5 mt-0.5 flex-shrink-0 transition-transform group-hover/item:scale-110"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <div class="flex-1 min-w-0">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="font-medium link link-hover"
+                          >
+                            {item.name}
+                          </a>
+                        ) : (
+                          <span class="font-medium">{item.name}</span>
+                        )}
+                        <p class="text-sm text-base-content/60">{item.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-12 text-center text-base-content/50 animate-on-scroll">
+        <p>Last updated: January 2026</p>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

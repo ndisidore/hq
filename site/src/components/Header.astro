@@ -32,10 +32,9 @@ const aboutItems = [
         {
           navItems.map((item) => (
             <li>
-              <a href={item.href} class="flex items-center gap-2">
-                <Icon name={item.icon} class="h-4 w-4" />
+              <HeaderLink href={item.href} icon={item.icon}>
                 {item.label}
-              </a>
+              </HeaderLink>
             </li>
           ))
         }

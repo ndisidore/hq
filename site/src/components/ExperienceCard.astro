@@ -138,107 +138,17 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
 </div>
 
 <script>
-  // Store card controllers for hash-based expansion
-  const cardControllers: Map<string, { setExpanded: (expand: boolean) => void }> = new Map();
-  let controller: AbortController | null = null;
-  let initialized = false;
+  import { registerExpandCollapseInit } from '../utils/expand-collapse';
 
-  function initExperienceCards() {
-    // Abort previous listeners before re-initializing
-    if (controller) {
-      controller.abort();
-    }
-    controller = new AbortController();
-    cardControllers.clear();
-
-    document.querySelectorAll('.experience-card').forEach((card) => {
-      const header = card.querySelector('.experience-header');
-      const toggle = card.querySelector('.experience-toggle');
-      const collapsed = card.querySelector('.experience-collapsed');
-      const expanded = card.querySelector('.experience-expanded');
-      const chevron = toggle?.querySelector('svg');
-      const cardId = card.getAttribute('data-id');
-
-      let isExpanded = false;
-
-      function setExpanded(expand: boolean) {
-        isExpanded = expand;
-        header?.setAttribute('aria-expanded', String(expand));
-        toggle?.setAttribute('aria-label', expand ? 'Collapse details' : 'Expand details');
-
-        if (expand) {
-          // Collapse the summary, expand the details
-          collapsed?.classList.remove('grid-rows-[1fr]', 'mt-4');
-          collapsed?.classList.add('grid-rows-[0fr]', 'mt-0');
-          expanded?.classList.remove('grid-rows-[0fr]', 'mt-0');
-          expanded?.classList.add('grid-rows-[1fr]', 'mt-4');
-          chevron?.classList.add('rotate-180');
-        } else {
-          // Expand the summary, collapse the details
-          collapsed?.classList.remove('grid-rows-[0fr]', 'mt-0');
-          collapsed?.classList.add('grid-rows-[1fr]', 'mt-4');
-          expanded?.classList.remove('grid-rows-[1fr]', 'mt-4');
-          expanded?.classList.add('grid-rows-[0fr]', 'mt-0');
-          chevron?.classList.remove('rotate-180');
-        }
-      }
-
-      function handleToggle(e: Event) {
-        e.preventDefault();
-        setExpanded(!isExpanded);
-      }
-
-      const opts = { signal: controller!.signal };
-
-      // Header click/keydown handlers
-      header?.addEventListener('click', handleToggle, opts);
-      header?.addEventListener('keydown', (e) => {
-        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-          e.preventDefault();
-          handleToggle(e);
-        }
-      }, opts);
-
-      // Toggle button click handler
-      toggle?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        handleToggle(e);
-      }, opts);
-
-      // Company link click handler (prevent toggle)
-      card.querySelector('.company-link')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-      }, opts);
-
-      // Store controller for hash-based expansion
-      if (cardId) {
-        cardControllers.set(cardId, { setExpanded });
-      }
-    });
-
-    // Handle hash-based expansion
-    const handleHash = () => {
-      const hash = window.location.hash.slice(1);
-      const cardController = cardControllers.get(hash);
-      if (cardController) {
-        cardController.setExpanded(true);
-        setTimeout(() => {
-          document.getElementById(`exp-${hash}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
-    };
-
-    // Check hash on load and listen for changes
-    handleHash();
-    window.addEventListener('hashchange', handleHash, { signal: controller.signal });
-  }
-
-  // Run on initial load
-  initExperienceCards();
-
-  // Re-run after Astro view transitions (guard against duplicate registration)
-  if (!initialized) {
-    initialized = true;
-    document.addEventListener('astro:after-swap', initExperienceCards);
-  }
+  registerExpandCollapseInit({
+    containerSelector: '.experience-card',
+    headerSelector: '.experience-header',
+    toggleSelector: '.experience-toggle',
+    collapsedSelector: '.experience-collapsed',
+    expandedSelector: '.experience-expanded',
+    idAttribute: 'data-id',
+    idPrefix: 'exp-',
+    margin: 'mt-4',
+    companyLinkSelector: '.company-link',
+  });
 </script>

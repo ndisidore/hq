@@ -6,15 +6,27 @@
 /** Delay before scrolling to allow expand animation to start */
 const EXPAND_ANIMATION_DELAY_MS = 100;
 
+/**
+ * Configuration for expand/collapse behavior on a container of cards.
+ */
 export interface ExpandCollapseConfig {
+  /** CSS selector for the card container elements */
   containerSelector: string;
+  /** CSS selector for the clickable header within each card */
   headerSelector: string;
+  /** CSS selector for the toggle button within each card */
   toggleSelector: string;
+  /** CSS selector for the collapsed content section */
   collapsedSelector: string;
+  /** CSS selector for the expanded content section */
   expandedSelector: string;
+  /** HTML attribute name that stores the card's unique ID */
   idAttribute: string;
+  /** Prefix to prepend when constructing element IDs for scrolling */
   idPrefix: string;
+  /** Tailwind margin class to apply in expanded/collapsed states */
   margin: 'mt-2' | 'mt-4';
+  /** Optional CSS selector for company links that should not trigger toggle */
   companyLinkSelector?: string;
 }
 
@@ -26,7 +38,8 @@ interface ExpandCollapseState {
   controller: AbortController | null;
   cardControllers: Map<string, CardController>;
   initialized: boolean;
-  cleanupRegistered: boolean;
+  swapHandler: (() => void) | null;
+  cleanupHandler: (() => void) | null;
 }
 
 const stateByType: Map<string, ExpandCollapseState> = new Map();
@@ -38,11 +51,36 @@ function getState(containerSelector: string): ExpandCollapseState {
       controller: null,
       cardControllers: new Map(),
       initialized: false,
-      cleanupRegistered: false,
+      swapHandler: null,
+      cleanupHandler: null,
     };
     stateByType.set(containerSelector, state);
   }
   return state;
+}
+
+/**
+ * Cleans up state for a specific container selector.
+ * Removes event listeners, aborts controllers, and removes from stateByType.
+ */
+function cleanupState(containerSelector: string): void {
+  const state = stateByType.get(containerSelector);
+  if (!state) return;
+
+  if (state.swapHandler) {
+    document.removeEventListener('astro:after-swap', state.swapHandler);
+  }
+  if (state.cleanupHandler) {
+    document.removeEventListener(
+      'astro:before-preparation',
+      state.cleanupHandler,
+    );
+  }
+  if (state.controller) {
+    state.controller.abort();
+  }
+  state.cardControllers.clear();
+  stateByType.delete(containerSelector);
 }
 
 function setExpanded(
@@ -174,22 +212,15 @@ export function registerExpandCollapseInit(config: ExpandCollapseConfig): void {
 
   if (!state.initialized) {
     state.initialized = true;
-    const swapHandler = () => initExpandCollapse(config);
-    document.addEventListener('astro:after-swap', swapHandler);
 
-    // Clean up on page unload (Astro-specific lifecycle)
-    if (!state.cleanupRegistered) {
-      state.cleanupRegistered = true;
-      document.addEventListener(
-        'astro:before-preparation',
-        () => {
-          document.removeEventListener('astro:after-swap', swapHandler);
-          if (state.controller) state.controller.abort();
-          state.initialized = false;
-          state.cleanupRegistered = false;
-        },
-        { once: true },
-      );
-    }
+    // Store handler on state so the same reference can be removed later
+    state.swapHandler = () => initExpandCollapse(config);
+    document.addEventListener('astro:after-swap', state.swapHandler);
+
+    // Clean up on page navigation (Astro-specific lifecycle)
+    // Each container registers its own cleanup handler
+    const containerSelector = config.containerSelector;
+    state.cleanupHandler = () => cleanupState(containerSelector);
+    document.addEventListener('astro:before-preparation', state.cleanupHandler);
   }
 }

@@ -9,9 +9,12 @@
     "astro": "astro",
     "deploy": "astro build && wrangler deploy",
     "cf-typegen": "wrangler types",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
+    "format:check": "biome format .",
+    "format:fix": "biome format --write .",
+    "lint:check": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "lint:tsc": "astro sync && tsc --noEmit",
+    "lint": "npm run format:check && npm run lint:check && npm run lint:tsc"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.12",

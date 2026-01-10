@@ -26,6 +26,7 @@ interface ExpandCollapseState {
   controller: AbortController | null;
   cardControllers: Map<string, CardController>;
   initialized: boolean;
+  cleanupRegistered: boolean;
 }
 
 const stateByType: Map<string, ExpandCollapseState> = new Map();
@@ -37,6 +38,7 @@ function getState(containerSelector: string): ExpandCollapseState {
       controller: null,
       cardControllers: new Map(),
       initialized: false,
+      cleanupRegistered: false,
     };
     stateByType.set(containerSelector, state);
   }
@@ -93,7 +95,7 @@ export function initExpandCollapse(config: ExpandCollapseConfig): void {
     const toggle = card.querySelector(config.toggleSelector);
     const collapsed = card.querySelector(config.collapsedSelector);
     const expanded = card.querySelector(config.expandedSelector);
-    const chevron = toggle?.querySelector('svg');
+    const chevron = toggle?.querySelector('svg') ?? null;
     const cardId = card.getAttribute(config.idAttribute);
 
     let isExpanded = false;
@@ -176,14 +178,18 @@ export function registerExpandCollapseInit(config: ExpandCollapseConfig): void {
     document.addEventListener('astro:after-swap', swapHandler);
 
     // Clean up on page unload (Astro-specific lifecycle)
-    document.addEventListener(
-      'astro:before-preparation',
-      () => {
-        document.removeEventListener('astro:after-swap', swapHandler);
-        if (state.controller) state.controller.abort();
-        state.initialized = false;
-      },
-      { once: true },
-    );
+    if (!state.cleanupRegistered) {
+      state.cleanupRegistered = true;
+      document.addEventListener(
+        'astro:before-preparation',
+        () => {
+          document.removeEventListener('astro:after-swap', swapHandler);
+          if (state.controller) state.controller.abort();
+          state.initialized = false;
+          state.cleanupRegistered = false;
+        },
+        { once: true },
+      );
+    }
   }
 }

@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const philosophyEntries = await getCollection('philosophy');
+if (philosophyEntries.length === 0) {
+  throw new Error(
+    "No entries found in 'philosophy' collection. Ensure src/content/philosophy/ contains at least one .mdx file.",
+  );
+}
+const philosophy = philosophyEntries[0];
+const { title, values } = philosophy.data;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description="Core principles that guide how I build software and lead teams" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
+      <h1 class="text-4xl font-bold mb-2">{title}</h1>
+      <p class="text-base-content/70 mb-8">Core principles that guide how I build software and lead teams</p>
+
+      <div class="space-y-6">
+        {
+          values.map((item) => (
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <div class="flex flex-wrap items-center gap-3">
+                  <h2 class="card-title text-xl">{item.value}</h2>
+                  {item.aka && <span class="badge badge-primary badge-outline">{item.aka}</span>}
+                </div>
+                <p class="mt-2 text-base-content/80 leading-relaxed">{item.description}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

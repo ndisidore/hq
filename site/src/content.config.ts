@@ -1,6 +1,20 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const philosophy = defineCollection({
+  loader: glob({ base: './src/content/philosophy', pattern: '*.mdx' }),
+  schema: z.object({
+    title: z.string(),
+    values: z.array(
+      z.object({
+        value: z.string(),
+        aka: z.string().optional(),
+        description: z.string(),
+      }),
+    ),
+  }),
+});
+
 const blog = defineCollection({
   // Load Markdown and MDX files in the `src/content/blog/` directory.
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
@@ -59,4 +73,4 @@ const experience = defineCollection({
     ),
 });
 
-export const collections = { blog, experience };
+export const collections = { blog, experience, philosophy };

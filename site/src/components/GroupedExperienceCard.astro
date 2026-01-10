@@ -74,17 +74,24 @@ const maxCollapsedTech = 8;
       </div>
 
       <!-- Roles -->
-      <div class="space-y-4">
+      <div class="relative space-y-4 ml-1">
+        <!-- Continuous timeline line -->
+        {roles.length > 1 && (
+          <div
+            class="absolute left-[3px] top-3 w-0.5 bg-primary/30"
+            style={`height: calc(100% - 1.5rem);`}
+          />
+        )}
         {roles.map((role, index) => {
           const hasMoreTech = role.technologies.length > maxCollapsedTech;
           const isLast = index === roles.length - 1;
           return (
             <div
-              class="role-card relative pl-4 border-l-2 border-base-300"
+              class="role-card relative pl-4"
               data-role-id={role.id}
             >
               <!-- Role connector dot -->
-              <div class="absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-base-300"></div>
+              <div class="absolute left-0 top-2 w-2 h-2 rounded-full bg-primary/50 border border-primary z-10"></div>
 
               <!-- Role Header - clickable to toggle -->
               <div
@@ -167,96 +174,16 @@ const maxCollapsedTech = 8;
 </div>
 
 <script>
-  // Store role controllers for hash-based expansion
-  const roleControllers: Map<string, { setExpanded: (expand: boolean) => void }> = new Map();
-  let controller: AbortController | null = null;
-  let initialized = false;
+  import { registerExpandCollapseInit } from '../utils/expand-collapse';
 
-  function initGroupedExperienceCards() {
-    // Abort previous listeners before re-initializing
-    if (controller) {
-      controller.abort();
-    }
-    controller = new AbortController();
-    roleControllers.clear();
-
-    document.querySelectorAll('.grouped-experience-card').forEach((card) => {
-      card.querySelectorAll('.role-card').forEach((roleCard) => {
-        const header = roleCard.querySelector('.role-header');
-        const toggle = roleCard.querySelector('.role-toggle');
-        const collapsed = roleCard.querySelector('.role-collapsed');
-        const expanded = roleCard.querySelector('.role-expanded');
-        const chevron = toggle?.querySelector('svg');
-        const roleId = roleCard.getAttribute('data-role-id');
-
-        let isExpanded = false;
-
-        function setExpanded(expand: boolean) {
-          isExpanded = expand;
-          header?.setAttribute('aria-expanded', String(expand));
-          toggle?.setAttribute('aria-label', expand ? 'Collapse details' : 'Expand details');
-
-          if (expand) {
-            collapsed?.classList.remove('grid-rows-[1fr]', 'mt-2');
-            collapsed?.classList.add('grid-rows-[0fr]', 'mt-0');
-            expanded?.classList.remove('grid-rows-[0fr]', 'mt-0');
-            expanded?.classList.add('grid-rows-[1fr]', 'mt-2');
-            chevron?.classList.add('rotate-180');
-          } else {
-            collapsed?.classList.remove('grid-rows-[0fr]', 'mt-0');
-            collapsed?.classList.add('grid-rows-[1fr]', 'mt-2');
-            expanded?.classList.remove('grid-rows-[1fr]', 'mt-2');
-            expanded?.classList.add('grid-rows-[0fr]', 'mt-0');
-            chevron?.classList.remove('rotate-180');
-          }
-        }
-
-        function handleToggle(e: Event) {
-          e.preventDefault();
-          setExpanded(!isExpanded);
-        }
-
-        const opts = { signal: controller!.signal };
-
-        header?.addEventListener('click', handleToggle, opts);
-        header?.addEventListener('keydown', (e) => {
-          if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-            e.preventDefault();
-            handleToggle(e);
-          }
-        }, opts);
-
-        toggle?.addEventListener('click', (e) => {
-          e.stopPropagation();
-          handleToggle(e);
-        }, opts);
-
-        if (roleId) {
-          roleControllers.set(roleId, { setExpanded });
-        }
-      });
-    });
-
-    // Handle hash-based expansion
-    const handleHash = () => {
-      const hash = window.location.hash.slice(1);
-      const roleController = roleControllers.get(hash);
-      if (roleController) {
-        roleController.setExpanded(true);
-        setTimeout(() => {
-          document.getElementById(`role-${hash}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
-    };
-
-    handleHash();
-    window.addEventListener('hashchange', handleHash, { signal: controller.signal });
-  }
-
-  initGroupedExperienceCards();
-
-  if (!initialized) {
-    initialized = true;
-    document.addEventListener('astro:after-swap', initGroupedExperienceCards);
-  }
+  registerExpandCollapseInit({
+    containerSelector: '.grouped-experience-card .role-card',
+    headerSelector: '.role-header',
+    toggleSelector: '.role-toggle',
+    collapsedSelector: '.role-collapsed',
+    expandedSelector: '.role-expanded',
+    idAttribute: 'data-role-id',
+    idPrefix: 'role-',
+    margin: 'mt-2',
+  });
 </script>

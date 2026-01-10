@@ -10,10 +10,10 @@ import { SITE_TITLE } from '../consts';
     <BaseHead title={`Friend | ${SITE_TITLE}`} description="Speak friend and enter" />
     <style>
       .doors-container {
-        background-color: #1a1a2e;
+        background-color: var(--color-base-300);
       }
       .doors-svg {
-        filter: drop-shadow(0 0 20px rgba(147, 197, 253, 0.3));
+        filter: drop-shadow(0 0 20px color-mix(in oklch, var(--color-primary) 30%, transparent));
       }
       .listening {
         animation: pulse 1.5s ease-in-out infinite;
@@ -33,10 +33,9 @@ import { SITE_TITLE } from '../consts';
       <img
         src={doorsOfDurin.src}
         alt="Doors of Durin"
-        class="doors-svg object-contain"
-        style="height: 85vh; width: auto;"
+        class="doors-svg object-contain h-[85vh] w-auto"
       />
-      <p id="prompt-text" class="text-2xl md:text-4xl text-blue-200 font-serif text-center px-4">
+      <p id="prompt-text" class="text-2xl md:text-4xl text-primary font-serif text-center px-4">
         Speak friend and enter
       </p>
       <div id="speech-controls" class="flex flex-col items-center gap-2">
@@ -46,7 +45,7 @@ import { SITE_TITLE } from '../consts';
         >
           Begin Listening
         </button>
-        <p id="status" class="text-sm text-gray-400 h-6"></p>
+        <p id="status" class="text-sm text-base-content/60 h-6"></p>
       </div>
       <div id="fallback-controls" class="hidden flex flex-col items-center gap-2">
         <button
@@ -55,7 +54,7 @@ import { SITE_TITLE } from '../consts';
         >
           Enter
         </button>
-        <p class="text-sm text-gray-400 italic">Speech recognition available on supported browsers</p>
+        <p class="text-sm text-base-content/60 italic">Speech recognition available on supported browsers</p>
       </div>
     </div>
 

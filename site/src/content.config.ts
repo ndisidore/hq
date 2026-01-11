@@ -1,10 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const philosophy = defineCollection({
-  loader: glob({ base: './src/content/philosophy', pattern: '*.mdx' }),
+const principles = defineCollection({
+  loader: glob({ base: './src/content/principles', pattern: '*.mdx' }),
   schema: z.object({
     title: z.string(),
+    blurb: z.string(),
     values: z.array(
       z.object({
         value: z.string(),
@@ -73,4 +74,4 @@ const experience = defineCollection({
     ),
 });
 
-export const collections = { blog, experience, philosophy };
+export const collections = { blog, experience, principles };

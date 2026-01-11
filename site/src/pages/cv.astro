@@ -6,6 +6,7 @@ import ExperienceCard from '../components/ExperienceCard.astro';
 import Footer from '../components/Footer.astro';
 import GroupedExperienceCard from '../components/GroupedExperienceCard.astro';
 import Header from '../components/Header.astro';
+import SkillRadar from '../components/SkillRadar.astro';
 import { getTechIcon, SITE_TITLE } from '../consts';
 import {
   parseGroupedExperienceContent,
@@ -113,6 +114,17 @@ const skills = {
     'Modbus',
   ],
 };
+
+const expertise = [
+  { label: 'Systems Programming', value: 90 },
+  { label: 'Cloud & DevOps', value: 95 },
+  { label: 'Distributed Systems', value: 90 },
+  { label: 'Data Engineering', value: 70 },
+  { label: 'AI & ML', value: 75 },
+  { label: 'Frontend & Web', value: 75 },
+  { label: 'IoT & Embedded', value: 65 },
+  { label: 'Observability & SRE', value: 85 },
+];
 ---
 
 <!doctype html>
@@ -239,6 +251,20 @@ const skills = {
               </div>
             ))
           }
+        </div>
+      </section>
+
+      <!-- Expertise Section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <Icon name="tabler:chart-radar" class="h-6 w-6" />
+          Expertise
+        </h2>
+
+        <div class="card bg-base-200">
+          <div class="card-body items-center">
+            <SkillRadar skills={expertise} title="" />
+          </div>
         </div>
       </section>
 

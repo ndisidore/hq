@@ -11,6 +11,7 @@ interface Props {
 }
 
 const { skills, size = 500, title = 'Skill Radar' } = Astro.props;
+if (skills.length === 0) return;
 
 // Chart configuration
 const paddingX = 80; // Extra horizontal padding for labels

@@ -1,0 +1,155 @@
+---
+interface Skill {
+  label: string;
+  value: number; // 0-100
+}
+
+interface Props {
+  skills: Skill[];
+  size?: number;
+  title?: string;
+}
+
+const { skills, size = 500, title = 'Skill Radar' } = Astro.props;
+if (skills.length === 0) return;
+
+// Chart configuration
+const paddingX = 80; // Extra horizontal padding for labels
+const paddingY = 0; // Less vertical padding needed
+const viewBoxWidth = size + paddingX * 2;
+const viewBoxHeight = size + paddingY * 2;
+const centerX = viewBoxWidth / 2;
+const centerY = viewBoxHeight / 2;
+const maxRadius = size * 0.28; // Leave room for labels
+const rings = [0.2, 0.4, 0.6, 0.8, 1.0];
+const numPoints = skills.length;
+const angleStep = (2 * Math.PI) / numPoints;
+const startAngle = -Math.PI / 2; // Start from top
+
+// Pre-compute all coordinates
+function getPoint(index: number, value: number) {
+  const angle = startAngle + index * angleStep;
+  const radius = (value / 100) * maxRadius;
+  return {
+    x: centerX + radius * Math.cos(angle),
+    y: centerY + radius * Math.sin(angle),
+  };
+}
+
+// Generate polygon points string for rings
+const ringPolygons = rings.map((scale) => {
+  return Array.from({ length: numPoints }, (_, i) => {
+    const pt = getPoint(i, scale * 100);
+    return `${pt.x},${pt.y}`;
+  }).join(' ');
+});
+
+// Generate axis lines data
+const axisLines = skills.map((_, i) => {
+  const endpoint = getPoint(i, 100);
+  return { x1: centerX, y1: centerY, x2: endpoint.x, y2: endpoint.y };
+});
+
+// Generate skill polygon points
+const skillPolygon = skills
+  .map((s, i) => {
+    const pt = getPoint(i, s.value);
+    return `${pt.x},${pt.y}`;
+  })
+  .join(' ');
+
+// Generate skill dots data
+const skillDots = skills.map((s, i) => {
+  const pt = getPoint(i, s.value);
+  return { cx: pt.x, cy: pt.y };
+});
+
+// Generate label data
+const labelData = skills.map((skill, i) => {
+  const angle = startAngle + i * angleStep;
+  const labelRadius = maxRadius + 40;
+  const x = centerX + labelRadius * Math.cos(angle);
+  const y = centerY + labelRadius * Math.sin(angle);
+
+  let anchor = 'middle';
+  if (Math.cos(angle) < -0.1) anchor = 'end';
+  else if (Math.cos(angle) > 0.1) anchor = 'start';
+
+  // Split long labels
+  const words = skill.label.split(' ');
+  let lines: string[];
+  if (words.length <= 2) {
+    lines = [skill.label];
+  } else {
+    const mid = Math.ceil(words.length / 2);
+    lines = [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+  }
+
+  return { x, y, anchor, lines };
+});
+
+const ariaLabel = `Radar chart showing skill levels: ${skills.map((s) => `${s.label}: ${s.value}%`).join(', ')}`;
+---
+
+<div class="flex flex-col items-center w-full overflow-visible">
+  {title && <h3 class="text-xl font-bold mb-4">{title}</h3>}
+  <svg
+    viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+    class="w-full h-auto max-w-[750px]"
+    role="img"
+    aria-label={ariaLabel}
+  >
+    <!-- Background rings -->
+    {ringPolygons.map((points) => (
+      <polygon
+        points={points}
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        class="text-base-content/15"
+      />
+    ))}
+
+    <!-- Axis lines from center to each vertex -->
+    {axisLines.map((line) => (
+      <line
+        x1={line.x1}
+        y1={line.y1}
+        x2={line.x2}
+        y2={line.y2}
+        stroke="currentColor"
+        stroke-width="1"
+        class="text-base-content/20"
+      />
+    ))}
+
+    <!-- Skill polygon (filled area) -->
+    <polygon
+      points={skillPolygon}
+      class="fill-primary/25 stroke-primary"
+      stroke-width="2"
+    />
+
+    <!-- Skill points -->
+    {skillDots.map((dot) => (
+      <circle cx={dot.cx} cy={dot.cy} r="4" class="fill-primary" />
+    ))}
+
+    <!-- Labels -->
+    {labelData.map((label) => (
+      <text
+        x={label.x}
+        y={label.y}
+        text-anchor={label.anchor}
+        dominant-baseline="middle"
+        class="fill-base-content text-xs font-medium"
+      >
+        {label.lines.map((line, idx) => (
+          <tspan x={label.x} dy={idx === 0 ? 0 : '1.2em'}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    ))}
+  </svg>
+</div>

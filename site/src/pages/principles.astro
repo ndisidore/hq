@@ -5,26 +5,26 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
 
-const philosophyEntries = await getCollection('philosophy');
-if (philosophyEntries.length === 0) {
+const principlesEntries = await getCollection('principles');
+if (principlesEntries.length === 0) {
   throw new Error(
-    "No entries found in 'philosophy' collection. Ensure src/content/philosophy/ contains at least one .mdx file.",
+    "No entries found in 'principles' collection. Ensure src/content/principles/ contains at least one .mdx file.",
   );
 }
-const philosophy = philosophyEntries[0];
-const { title, values } = philosophy.data;
+const principles = principlesEntries[0];
+const { title, blurb, values } = principles.data;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={`${title} | ${SITE_TITLE}`} description="Core principles that guide how I build software and lead teams" />
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description={blurb} />
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
     <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
       <h1 class="text-4xl font-bold mb-2">{title}</h1>
-      <p class="text-base-content/70 mb-8">Core principles that guide how I build software and lead teams</p>
+      <p class="text-base-content/70 mb-8">{blurb}</p>
 
       <div class="space-y-6">
         {

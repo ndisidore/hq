@@ -23,7 +23,6 @@ const categories: UsesCategory[] = [
   {
     title: 'Editor & IDE',
     icon: 'tabler:code',
-    span: 'large',
     items: [
       {
         name: 'VS Code',
@@ -32,10 +31,10 @@ const categories: UsesCategory[] = [
         link: 'https://code.visualstudio.com/',
       },
       {
-        name: 'Neovim',
+        name: 'Helix',
         description: 'For quick edits and terminal work',
-        icon: 'logos:neovim',
-        link: 'https://neovim.io/',
+        icon: 'simple-icons:helix',
+        link: 'https://helix-editor.com/',
       },
       {
         name: 'JetBrains IDEs',
@@ -50,22 +49,28 @@ const categories: UsesCategory[] = [
     icon: 'tabler:terminal-2',
     items: [
       {
-        name: 'Kitty',
+        name: 'Alacritty',
         description: 'GPU-accelerated terminal',
-        icon: 'tabler:brand-open-source',
-        link: 'https://sw.kovidgoyal.net/kitty/',
+        icon: 'simple-icons:alacritty',
+        link: 'https://alacritty.org/',
       },
       {
         name: 'Fish Shell',
         description: 'Friendly interactive shell',
-        icon: 'tabler:fish',
+        icon: 'simple-icons:fishshell',
         link: 'https://fishshell.com/',
       },
       {
         name: 'Starship',
         description: 'Cross-shell prompt',
-        icon: 'tabler:rocket',
+        icon: 'simple-icons:starship',
         link: 'https://starship.rs/',
+      },
+      {
+        name: 'Chezmoi',
+        description: 'Dotfile manager',
+        icon: 'tabler:settings-share',
+        link: 'https://chezmoi.io/',
       },
     ],
   },

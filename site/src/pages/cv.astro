@@ -28,7 +28,8 @@ const processedExperience = experienceEntries.map((entry) => {
 
     const processedRoles = data.roles.map((role) => ({
       ...role,
-      description: roleContent[role.id]?.summary || '',
+      highlights: roleContent[role.id]?.highlights || '',
+      description: roleContent[role.id]?.description || '',
       responsibilities: roleContent[role.id]?.details || [],
     }));
 
@@ -55,7 +56,8 @@ const processedExperience = experienceEntries.map((entry) => {
     companyUrl: data.companyUrl,
     location: data.location,
     period: data.period,
-    description: content.summary,
+    highlights: content.highlights,
+    description: content.description,
     responsibilities: content.details,
     technologies: data.technologies,
   };
@@ -179,6 +181,7 @@ const expertise = [
                     companyUrl={exp.companyUrl}
                     location={exp.location}
                     period={exp.period}
+                    highlights={exp.highlights}
                     description={exp.description}
                     responsibilities={exp.responsibilities}
                     technologies={exp.technologies}

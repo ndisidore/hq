@@ -2,17 +2,20 @@
  * Utilities for extracting sections from MDX body content by parsing headings.
  *
  * For single experiences:
- *   - ## Summary -> description
+ *   - ## Highlights -> condensed view (work summary)
+ *   - ## Description -> expanded view (role/team context)
  *   - ## Details -> responsibilities (parsed as list items)
  *
  * For grouped experiences:
  *   - ## {role-id}
- *     - ### Summary -> role description
+ *     - ### Highlights -> condensed view
+ *     - ### Description -> expanded view context
  *     - ### Details -> role responsibilities
  */
 
 export interface ParsedSection {
-  summary: string;
+  highlights: string;
+  description: string;
   details: string[];
 }
 
@@ -21,25 +24,33 @@ export interface ParsedRoleContent {
 }
 
 /**
- * Parse a single-position MDX body into summary and details.
+ * Parse a single-position MDX body into highlights, description, and details.
  * Expects markdown structure:
- *   ## Summary
- *   <text>
+ *   ## Highlights
+ *   <text for condensed view>
+ *   ## Description
+ *   <text for expanded view context>
  *   ## Details
  *   - item 1
  *   - item 2
  */
 export function parseSingleExperienceContent(body: string): ParsedSection {
   const lines = body.split('\n');
-  let currentSection: 'none' | 'summary' | 'details' = 'none';
-  const summary: string[] = [];
+  let currentSection: 'none' | 'highlights' | 'description' | 'details' =
+    'none';
+  const highlights: string[] = [];
+  const description: string[] = [];
   const details: string[] = [];
 
   for (const line of lines) {
     const trimmed = line.trim();
 
-    if (trimmed.toLowerCase() === '## summary') {
-      currentSection = 'summary';
+    if (trimmed.toLowerCase() === '## highlights') {
+      currentSection = 'highlights';
+      continue;
+    }
+    if (trimmed.toLowerCase() === '## description') {
+      currentSection = 'description';
       continue;
     }
     if (trimmed.toLowerCase() === '## details') {
@@ -53,8 +64,10 @@ export function parseSingleExperienceContent(body: string): ParsedSection {
       continue;
     }
 
-    if (currentSection === 'summary' && trimmed) {
-      summary.push(trimmed);
+    if (currentSection === 'highlights' && trimmed) {
+      highlights.push(trimmed);
+    } else if (currentSection === 'description' && trimmed) {
+      description.push(trimmed);
     } else if (currentSection === 'details') {
       // Parse list items (- or * prefix)
       const listMatch = trimmed.match(/^[-*]\s+(.+)$/);
@@ -65,7 +78,8 @@ export function parseSingleExperienceContent(body: string): ParsedSection {
   }
 
   return {
-    summary: summary.join(' '),
+    highlights: highlights.join(' '),
+    description: description.join(' '),
     details,
   };
 }
@@ -74,8 +88,10 @@ export function parseSingleExperienceContent(body: string): ParsedSection {
  * Parse a grouped-position MDX body into per-role content.
  * Expects markdown structure:
  *   ## role-id-1
- *   ### Summary
- *   <text>
+ *   ### Highlights
+ *   <text for condensed view>
+ *   ### Description
+ *   <text for expanded view context>
  *   ### Details
  *   - item 1
  *   ## role-id-2
@@ -86,14 +102,17 @@ export function parseGroupedExperienceContent(body: string): ParsedRoleContent {
   const roles: ParsedRoleContent = {};
 
   let currentRoleId: string | null = null;
-  let currentSubSection: 'none' | 'summary' | 'details' = 'none';
-  let currentSummary: string[] = [];
+  let currentSubSection: 'none' | 'highlights' | 'description' | 'details' =
+    'none';
+  let currentHighlights: string[] = [];
+  let currentDescription: string[] = [];
   let currentDetails: string[] = [];
 
   const saveCurrentRole = () => {
     if (currentRoleId) {
       roles[currentRoleId] = {
-        summary: currentSummary.join(' '),
+        highlights: currentHighlights.join(' '),
+        description: currentDescription.join(' '),
         details: currentDetails,
       };
     }
@@ -104,18 +123,28 @@ export function parseGroupedExperienceContent(body: string): ParsedRoleContent {
 
     // H2 = new role section
     const h2Match = trimmed.match(/^## (.+)$/);
-    if (h2Match && !['summary', 'details'].includes(h2Match[1].toLowerCase())) {
+    if (
+      h2Match &&
+      !['highlights', 'description', 'details'].includes(
+        h2Match[1].toLowerCase(),
+      )
+    ) {
       saveCurrentRole();
       currentRoleId = h2Match[1];
       currentSubSection = 'none';
-      currentSummary = [];
+      currentHighlights = [];
+      currentDescription = [];
       currentDetails = [];
       continue;
     }
 
     // H3 = sub-section within role
-    if (trimmed.toLowerCase() === '### summary') {
-      currentSubSection = 'summary';
+    if (trimmed.toLowerCase() === '### highlights') {
+      currentSubSection = 'highlights';
+      continue;
+    }
+    if (trimmed.toLowerCase() === '### description') {
+      currentSubSection = 'description';
       continue;
     }
     if (trimmed.toLowerCase() === '### details') {
@@ -130,8 +159,10 @@ export function parseGroupedExperienceContent(body: string): ParsedRoleContent {
     }
 
     if (currentRoleId) {
-      if (currentSubSection === 'summary' && trimmed) {
-        currentSummary.push(trimmed);
+      if (currentSubSection === 'highlights' && trimmed) {
+        currentHighlights.push(trimmed);
+      } else if (currentSubSection === 'description' && trimmed) {
+        currentDescription.push(trimmed);
       } else if (currentSubSection === 'details') {
         const listMatch = trimmed.match(/^[-*]\s+(.+)$/);
         if (listMatch) {

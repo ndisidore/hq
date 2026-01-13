@@ -9,7 +9,8 @@ interface Props {
   companyUrl?: string;
   location: string;
   period: string;
-  description: string;
+  highlights: string;
+  description?: string;
   responsibilities?: string[];
   technologies: string[];
 }
@@ -21,6 +22,7 @@ const {
   companyUrl,
   location,
   period,
+  highlights,
   description,
   responsibilities = [],
   technologies,
@@ -85,10 +87,10 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
         </div>
       </div>
 
-      <!-- Collapsed content (description + limited tech) -->
+      <!-- Collapsed content (highlights + limited tech) -->
       <div class="experience-collapsed grid grid-rows-[1fr] transition-all duration-200 ease-out mt-4">
         <div class="overflow-hidden">
-          <p class="text-sm text-base-content/70 leading-relaxed">{description}</p>
+          <p class="text-sm text-base-content/70 leading-relaxed">{highlights}</p>
           {technologies.length > 0 && (
             <div class="flex flex-wrap gap-2 mt-3">
               {technologies.slice(0, maxCollapsedTech).map((tech) => (
@@ -108,9 +110,12 @@ const hasMoreTech = technologies.length > maxCollapsedTech;
         </div>
       </div>
 
-      <!-- Expanded content (responsibilities + all tech) -->
+      <!-- Expanded content (description + responsibilities + all tech) -->
       <div class="experience-expanded grid grid-rows-[0fr] transition-all duration-200 ease-out mt-0">
         <div class="overflow-hidden">
+          {description && (
+            <p class="text-sm text-base-content/80 leading-relaxed mb-4">{description}</p>
+          )}
           {responsibilities.length > 0 && (
             <ul class="space-y-1.5 text-sm mb-4">
               {responsibilities.map((item) => (

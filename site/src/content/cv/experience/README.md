@@ -37,15 +37,19 @@ technologies:
   - Tech2
 ---
 
-## Summary
+## Highlights
 
-Brief description of the role and company.
+1-2 sentences summarizing key accomplishments and impact (shown in condensed view).
+
+## Description
+
+Context about the role, team, or company (shown in expanded view).
 
 ## Details
 
-- Accomplishment or responsibility one
-- Accomplishment or responsibility two
-- Accomplishment or responsibility three
+- Detailed accomplishment or responsibility one
+- Detailed accomplishment or responsibility two
+- Detailed accomplishment or responsibility three
 ```
 
 ## Grouped Position Template (Multiple Roles at One Company)
@@ -77,25 +81,33 @@ roles:
 
 ## company-role-one
 
-### Summary
+### Highlights
 
-Description of this role.
+1-2 sentences summarizing key accomplishments for this role.
+
+### Description
+
+Context about the team or product for this role.
 
 ### Details
 
-- Accomplishment one
-- Accomplishment two
+- Detailed accomplishment one
+- Detailed accomplishment two
 
 ## company-role-two
 
-### Summary
+### Highlights
 
-Description of this role.
+1-2 sentences summarizing key accomplishments for this role.
+
+### Description
+
+Context about the team or product for this role.
 
 ### Details
 
-- Accomplishment one
-- Accomplishment two
+- Detailed accomplishment one
+- Detailed accomplishment two
 ```
 
 ## Schema Reference
@@ -126,7 +138,15 @@ Description of this role.
 
 The MDX body is parsed to extract:
 
-- **Single positions**: `## Summary` and `## Details` sections
-- **Grouped positions**: `## {role-id}` sections, each with `### Summary` and `### Details`
+- **Single positions**: `## Highlights`, `## Description`, and `## Details` sections
+- **Grouped positions**: `## {role-id}` sections, each with `### Highlights`, `### Description`, and `### Details`
 
-The `## Details` section should contain a markdown list (`- item`). These become the expandable bullet points on the CV page.
+### Section Usage
+
+| Section | Display | Purpose |
+|---------|---------|---------|
+| `Highlights` | Condensed (collapsed) view | 1-2 sentences of key accomplishments/impact |
+| `Description` | Expanded view | Context about the role, team, or company |
+| `Details` | Expanded view | Markdown list (`- item`) of detailed responsibilities |
+
+The `Details` section becomes the expandable bullet points on the CV page.

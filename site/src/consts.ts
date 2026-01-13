@@ -104,6 +104,8 @@ export const TECH_ICON_MAP: Record<string, string> = {
   Prometheus: 'logos:prometheus',
   VictoriaMetrics: 'simple-icons:victoriametrics',
   Clickhouse: 'simple-icons:clickhouse',
+  Timescale: 'simple-icons:timescale',
+  Elasticsearch: 'logos:elasticsearch',
   'Cloudflare Workers': 'logos:cloudflare-workers-icon',
   'C++': 'logos:c-plusplus',
   Rust: 'logos:rust',

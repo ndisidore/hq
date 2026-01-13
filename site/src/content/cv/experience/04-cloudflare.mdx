@@ -51,6 +51,7 @@ roles:
       - Prometheus
       - VictoriaMetrics
       - Clickhouse
+      - Elasticsearch
       - PostgreSQL
       - TypeScript
       - Cloudflare Workers
@@ -58,9 +59,13 @@ roles:
 
 ## cloudflare-workers-ai
 
-### Summary
+### Highlights
 
-Cloudflare's edge-native, serverless vector database powering AI products and embeddings workflows.
+Designed custom vector storage format with IVF+PQ for edge query efficiency. Built metadata storage engine and dynamic re-indexer for real-time retrieval.
+
+### Description
+
+Vectorize is Cloudflare's edge-native, serverless vector database, powering AI products and embeddings workflows.
 
 ### Details
 
@@ -70,9 +75,13 @@ Cloudflare's edge-native, serverless vector database powering AI products and em
 
 ## cloudflare-workers-core
 
-### Summary
+### Highlights
 
-Managed the build pipeline and configuration systems for Cloudflare Workers.
+Launched Workers for Platforms with multi-tenant V8 runtime. Implemented privileged bindings and expanded edge storage architecture.
+
+### Description
+
+Core platform responsible for managing the build pipeline and configuration systems for Cloudflare Workers.
 
 ### Details
 
@@ -82,12 +91,17 @@ Managed the build pipeline and configuration systems for Cloudflare Workers.
 
 ## cloudflare-internal-tools
 
-### Summary
+### Highlights
 
-Cross-team abstractions used across Cloudflare, serving both internal developers and external product surfaces.
+Launched customer alerting platform with SLO-based anomaly detection. Operated Kafka messaging system processing 1T+ messages daily.
+
+### Description
+
+Internal Tools creates cross-team abstractions used across Cloudflare, serving both internal developers and external product surfaces.
 
 ### Details
 
 - Architected and launched Cloudflare's customer alerting platform, enabling service-based alert dispatch with enriched context via VictoriaMetrics and Clickhouse. Implemented multi-window SLO burn-rate anomaly detection to improve incident responsiveness
 - Operated and optimized Cloudflare's Kafka-backed internal messaging system powering 300+ producers/consumers across 15 brokers, processing over 1T messages per day
 - Spearheaded the Search Engine Crawl Hints initiative with Microsoft and Yandex, integrating with Cloudflare's cache invalidation stack to reduce redundant crawls and network load
+- Managed and optimized a multi-node Elasticsearch cluster supporting Cloudflare's global customer base, implementing automated index lifecycle management and performance tuning across 50+ production indices

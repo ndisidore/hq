@@ -6,7 +6,8 @@ interface Role {
   id: string;
   title: string;
   period: string;
-  description: string;
+  highlights: string;
+  description?: string;
   responsibilities?: string[];
   technologies: string[];
 }
@@ -115,10 +116,10 @@ const maxCollapsedTech = 8;
                 </div>
               </div>
 
-              <!-- Collapsed content (description + limited tech) -->
+              <!-- Collapsed content (highlights + limited tech) -->
               <div class="role-collapsed grid grid-rows-[1fr] transition-all duration-200 ease-out mt-2">
                 <div class="overflow-hidden">
-                  <p class="text-sm text-base-content/70 leading-relaxed">{role.description}</p>
+                  <p class="text-sm text-base-content/70 leading-relaxed">{role.highlights}</p>
                   {role.technologies.length > 0 && (
                     <div class="flex flex-wrap gap-2 mt-3">
                       {role.technologies.slice(0, maxCollapsedTech).map((tech) => (
@@ -138,9 +139,12 @@ const maxCollapsedTech = 8;
                 </div>
               </div>
 
-              <!-- Expanded content (responsibilities + all tech) -->
+              <!-- Expanded content (description + responsibilities + all tech) -->
               <div class="role-expanded grid grid-rows-[0fr] transition-all duration-200 ease-out mt-0">
                 <div class="overflow-hidden">
+                  {role.description && (
+                    <p class="text-sm text-base-content/80 leading-relaxed mb-3">{role.description}</p>
+                  )}
                   {role.responsibilities && role.responsibilities.length > 0 && (
                     <ul class="space-y-1.5 text-sm mb-3">
                       {role.responsibilities.map((item) => (

@@ -19,7 +19,8 @@ for file in "${files[@]}"; do
   if [[ -f "$file" ]]; then
     echo "Checking: $file"
     # Strip markdown syntax with pandoc, then run harper
-    if ! pandoc -t plain "$file" | harper-cli lint --user-dict-path "$DICT_PATH"; then
+    # Use -f markdown to handle .mdx files without warnings
+    if ! pandoc -f markdown -t plain "$file" | harper-cli lint --user-dict-path "$DICT_PATH"; then
       exit_code=1
     fi
     echo ""

@@ -103,7 +103,7 @@ export const TECH_ICON_MAP: Record<string, string> = {
   Kafka: 'logos:kafka-icon',
   Prometheus: 'logos:prometheus',
   VictoriaMetrics: 'simple-icons:victoriametrics',
-  Clickhouse: 'simple-icons:clickhouse',
+  ClickHouse: 'simple-icons:clickhouse',
   Timescale: 'simple-icons:timescale',
   Elasticsearch: 'logos:elasticsearch',
   'Cloudflare Workers': 'logos:cloudflare-workers-icon',

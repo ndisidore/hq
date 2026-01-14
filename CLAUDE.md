@@ -17,11 +17,15 @@ HQ is a monorepo containing:
 └── .github/    # CI workflows
 ```
 
+## Git Hooks
+
+Pre-commit hooks (via hk) run Biome and markdownlint on staged files. Install with `mise x -- hk install --mise`.
+
 ## CI Pipeline
 
 GitHub Actions runs on push/PR to main (site/ only):
-1. `npm run lint` (Biome)
-2. markdownlint on blog content
+1. `mise run lint` (Biome)
+2. `mise run lint:md` on blog content
 3. Grammar check via Harper
 
 Note: `infra/` has no CI validation yet (placeholder for future Terraform).

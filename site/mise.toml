@@ -3,3 +3,28 @@ node = "lts"
 "npm:markdownlint-cli" = "latest"
 harper-cli = "latest"
 pandoc = "latest"
+
+# These tasks run from site/ context, so paths are relative
+[tasks."lint:biome"]
+run = "npx @biomejs/biome check"
+description = "Run Biome linter"
+
+[tasks."lint:biome:fix"]
+run = "npx @biomejs/biome check --write"
+description = "Run Biome with auto-fix"
+
+[tasks."lint:md"]
+run = "markdownlint --config .markdownlint.json"
+description = "Run markdownlint"
+
+[tasks."lint:md:fix"]
+run = "markdownlint --config .markdownlint.json --fix"
+description = "Run markdownlint with auto-fix"
+
+[tasks.lint]
+run = "npm run lint"
+description = "Run all linters (Biome + tsc)"
+
+[tasks."lint:fix"]
+run = "npm run format:fix && npm run lint:fix"
+description = "Auto-fix all lint issues"

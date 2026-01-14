@@ -1,0 +1,23 @@
+amends "package://github.com/jdx/hk/releases/download/v1.29.0/hk@1.29.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.29.0/hk@1.29.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step> {
+    ["biome"] {
+        glob = List("site/**/*.js", "site/**/*.ts", "site/**/*.tsx", "site/**/*.astro", "site/**/*.json")
+        check = "mise //site:lint:biome -- $(echo '{{files}}' | sed 's|site/||g')"
+        fix = "mise //site:lint:biome:fix -- $(echo '{{files}}' | sed 's|site/||g')"
+    }
+    ["markdownlint"] {
+        glob = List("site/**/*.md", "!site/node_modules/**")
+        check = "mise //site:lint:md -- $(echo '{{files}}' | sed 's|site/||g')"
+        fix = "mise //site:lint:md:fix -- $(echo '{{files}}' | sed 's|site/||g')"
+    }
+}
+
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stash = "git"
+        steps = linters
+    }
+}

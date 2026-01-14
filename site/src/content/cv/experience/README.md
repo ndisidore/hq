@@ -10,7 +10,7 @@ MDX files for CV work experience. Each file represents a position or grouped set
 
 ## File Structure
 
-```
+```text
 experience/
 ├── 01-targeted-victory.mdx    # Oldest position
 ├── 02-knocki.mdx
@@ -113,7 +113,7 @@ Context about the team or product for this role.
 ## Schema Reference
 
 | Field | Type | Required | Description |
-|-------|------|----------|-------------|
+| ----- | ---- | -------- | ----------- |
 | `id` | string | Yes | URL-friendly identifier (used for hash links) |
 | `title` | string | Yes | Job title |
 | `company` | string | Yes | Company name |
@@ -128,7 +128,7 @@ Context about the team or product for this role.
 ### Role Schema (for grouped positions)
 
 | Field | Type | Required | Description |
-|-------|------|----------|-------------|
+| ----- | ---- | -------- | ----------- |
 | `id` | string | Yes | Must match the `## id` header in MDX body |
 | `title` | string | Yes | Role title |
 | `period` | string | Yes | Role period |
@@ -144,7 +144,7 @@ The MDX body is parsed to extract:
 ### Section Usage
 
 | Section | Display | Purpose |
-|---------|---------|---------|
+| ------- | ------- | ------- |
 | `Highlights` | Condensed (collapsed) view | 1-2 sentences of key accomplishments/impact |
 | `Description` | Expanded view | Context about the role, team, or company |
 | `Details` | Expanded view | Markdown list (`- item`) of detailed responsibilities |

@@ -1,0 +1,13 @@
+experimental_monorepo_root = true
+
+[tools]
+hk = "1.29.0"
+pkl = "0.30.2"
+
+[env]
+MISE_EXPERIMENTAL = "1"
+HK_MISE = "1"
+
+[tasks.pre-commit]
+run = "hk run pre-commit"
+description = "Run pre-commit hooks"

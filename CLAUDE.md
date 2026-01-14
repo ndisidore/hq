@@ -17,6 +17,10 @@ HQ is a monorepo containing:
 └── .github/    # CI workflows
 ```
 
+## Git Hooks
+
+Pre-commit hooks (via hk) run Biome and markdownlint on staged files. Install with `mise x -- hk install --mise`.
+
 ## CI Pipeline
 
 GitHub Actions runs on push/PR to main (site/ only):

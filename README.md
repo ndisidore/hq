@@ -45,6 +45,10 @@ This is my personal monorepo—the nerve center where my website lives and my in
 git clone https://github.com/ndisidore/hq.git
 cd hq
 
+# Install tools and git hooks
+mise install
+mise x -- hk install --mise
+
 # Enter the site dimension
 cd site
 npm install
@@ -61,7 +65,7 @@ npm run dev
 | **Content** | Markdown/MDX with Zod-validated frontmatter |
 | **Hosting** | [Cloudflare Workers](https://workers.cloudflare.com) |
 | **Linting** | [Biome](https://biomejs.dev), markdownlint, [Harper](https://github.com/Automattic/harper) |
-| **Tooling** | [mise](https://mise.jdx.dev) for version management |
+| **Tooling** | [mise](https://mise.jdx.dev) for version management, [hk](https://hk.jdx.dev) for git hooks |
 | **Infra** | Terraform (coming to a `terraform apply` near you) |
 
 ## CI Pipeline

@@ -27,10 +27,10 @@ jobs:
         run: npm ci
 
       - name: Run Biome lint
-        run: npm run lint
+        run: mise run lint
 
       - name: Run markdownlint
-        run: markdownlint 'src/content/blog/**/*.md' --config .markdownlint.json
+        run: mise run lint:md -- 'src/content/blog/**/*.md'
 
       - name: Run Harper grammar check (blog)
         # TODO: Remove continue-on-error once placeholder Lorem Ipsum content is replaced

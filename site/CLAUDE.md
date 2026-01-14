@@ -70,6 +70,7 @@ To add other icon sets, install `@iconify-json/<set-name>`.
 ## Code Style
 
 Biome handles linting and formatting:
+
 - Single quotes, always semicolons
 - 2-space indentation
 - Tailwind CSS directives enabled
@@ -80,13 +81,14 @@ Markdown files in `src/content/blog/` are linted with markdownlint and grammar-c
 
 If the Playwright MCP server is available, use it to verify UI changes:
 
-1. Start the dev server with `npm run dev` (runs on http://localhost:4321)
+1. Start the dev server with `npm run dev` (runs on <http://localhost:4321>)
 2. Use `browser_navigate` to load pages
 3. Use `browser_snapshot` to inspect the accessibility tree and verify elements
 4. Use `browser_take_screenshot` to capture visual state
 5. Use `browser_click`, `browser_hover`, etc. to test interactions
 
 This is especially useful for:
+
 - Verifying responsive layouts (use `browser_resize` for different viewport sizes)
 - Testing hover states and dropdowns
 - Checking theme switching behavior

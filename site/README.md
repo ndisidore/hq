@@ -21,7 +21,7 @@
 All commands run from this directory (`site/`):
 
 | Command | Action |
-|---------|--------|
+| ------- | ------ |
 | `npm run dev` | Start dev server at `localhost:4321` |
 | `npm run build` | Build production site to `./dist/` |
 | `npm run preview` | Build and preview locally via Wrangler |
@@ -46,7 +46,7 @@ mise trust && mise install
 **Managed tools:**
 
 | Tool | Version | Purpose |
-|------|---------|---------|
+| ---- | ------- | ------- |
 | Node.js | LTS | Runtime |
 | markdownlint-cli | latest | Markdown linting |
 | harper-cli | latest | Grammar checking |
@@ -58,7 +58,7 @@ mise trust && mise install
 
 ### Project Structure
 
-```
+```text
 src/
 ├── assets/         # Images, logos, static assets
 ├── components/     # Astro/UI components
@@ -78,6 +78,7 @@ scripts/            # Build/CI scripts
 Blog posts live in `src/content/blog/` as Markdown or MDX files. The content schema is defined in `src/content.config.ts` with Zod validation.
 
 **Required frontmatter:**
+
 ```yaml
 ---
 title: "Your Post Title"
@@ -88,6 +89,7 @@ tags: ["astro", "webdev"]
 ```
 
 **Optional fields:**
+
 - `updatedDate` - When the post was last updated
 - `heroImage` - Featured image path
 
@@ -96,7 +98,7 @@ tags: ["astro", "webdev"]
 File-based routing in `src/pages/`:
 
 | Route | File | Description |
-|-------|------|-------------|
+| ----- | ---- | ----------- |
 | `/` | `index.astro` | Home page |
 | `/blog` | `blog/index.astro` | Blog listing |
 | `/blog/[slug]` | `blog/[...slug].astro` | Individual blog posts |
@@ -114,7 +116,7 @@ The site supports extensive theming via [DaisyUI](https://daisyui.com/docs/theme
 Icons use [Iconify](https://iconify.design/) via `astro-icon`. Three icon sets are installed:
 
 | Set | Prefix | Browse | Use Case |
-|-----|--------|--------|----------|
+| --- | ------ | ------ | -------- |
 | [Tabler](https://icon-sets.iconify.design/tabler/) | `tabler:` | [Browse](https://icon-sets.iconify.design/tabler/) | UI icons |
 | [Simple Icons](https://icon-sets.iconify.design/simple-icons/) | `simple-icons:` | [Browse](https://icon-sets.iconify.design/simple-icons/) | Brand icons |
 | [Logos](https://icon-sets.iconify.design/logos/) | `logos:` | [Browse](https://icon-sets.iconify.design/logos/) | Tech/brand logos |
@@ -133,7 +135,7 @@ import { Icon } from 'astro-icon/components';
 ## Key Files
 
 | File | Purpose |
-|------|---------|
+| ---- | ------- |
 | `src/consts.ts` | Site metadata (title, author, social links) |
 | `src/styles/app.css` | Global styles and Tailwind directives |
 | `src/layouts/BlogPost.astro` | Blog post layout with TOC, metadata, navigation |
@@ -153,6 +155,7 @@ import { Icon } from 'astro-icon/components';
 - Tailwind CSS directives enabled
 
 Markdown files in `src/content/blog/` are additionally linted with:
+
 - **markdownlint** - Structural consistency
 - **Harper** - Grammar checking (via pandoc preprocessing)
 

@@ -201,7 +201,7 @@ function getSpanClasses(span?: 'wide' | 'tall' | 'large'): string {
         {
           categories.map((category, index) => (
             <div
-              class={`card bg-base-100 shadow-xl group hover:shadow-2xl transition-all duration-300 animate-on-scroll ${getSpanClasses(category.span)}`}
+              class={`card bg-base-100 animate-on-scroll ${getSpanClasses(category.span)}`}
               style={`--delay: ${index * 100}ms`}
             >
               <div class="card-body">

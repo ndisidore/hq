@@ -40,6 +40,10 @@ Tags have dedicated filter pages at `/tags/[tag]`. Tag utilities are in `src/uti
 
 Extensive theming support via DaisyUI. Theme persistence uses localStorage with system preference fallback. The `ThemeToggle.astro` component handles switching. FOUC is prevented by an inline script in `BaseHead.astro` that sets the theme before render.
 
+### Neobrutalism Design
+
+The site uses a neobrutalism aesthetic applied globally via `src/styles/app.css`. Key characteristics: bold 2px borders, offset box shadows (4px), and hover states that shift elements. Design tokens in `@theme` include `--neo-shadow`, `--neo-shadow-hover`, and `--neo-border` for consistency across components (buttons, cards, inputs, dropdowns, navbar).
+
 ### Icons
 
 Icons use [Iconify](https://iconify.design/) via `astro-icon`. Three icon sets are installed:

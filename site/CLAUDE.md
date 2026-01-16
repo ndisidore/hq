@@ -42,7 +42,7 @@ Extensive theming support via DaisyUI. Theme persistence uses localStorage with 
 
 ### Neobrutalism Design
 
-The site uses a neobrutalism aesthetic applied globally via `src/styles/app.css`. Key characteristics: bold 2px borders, offset box shadows (4px), and hover states that shift elements. Design tokens in `@theme` include `--neo-shadow`, `--neo-shadow-hover`, and `--neo-border` for consistency across components (buttons, cards, inputs, dropdowns, navbar).
+The site uses a neobrutalism aesthetic applied globally via `src/styles/app.css`. Key characteristics: bold 2px borders, offset box shadows (4px), and hover states that shift elements. Design tokens in `@theme` include `--neo-shadow` (4px), `--neo-shadow-sm` (3px), `--neo-shadow-hover` (2px), and `--neo-border` for consistency across components (buttons, cards, inputs, dropdowns, navbar).
 
 ### Icons
 

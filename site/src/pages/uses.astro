@@ -16,7 +16,7 @@ interface UsesCategory {
   title: string;
   icon: string;
   items: UsesItem[];
-  span?: 'wide' | 'tall' | 'large';
+  wide?: boolean; // Span 2 columns with internal 2-column grid
 }
 
 const categories: UsesCategory[] = [
@@ -37,6 +37,12 @@ const categories: UsesCategory[] = [
         link: 'https://helix-editor.com/',
       },
       {
+        name: 'Zed',
+        description: 'High-performance code editor',
+        icon: 'simple-icons:zedindustries',
+        link: 'https://zed.dev/',
+      },
+      {
         name: 'JetBrains IDEs',
         description: 'GoLand for Go, IntelliJ for Java',
         icon: 'logos:jetbrains',
@@ -47,6 +53,7 @@ const categories: UsesCategory[] = [
   {
     title: 'Terminal',
     icon: 'tabler:terminal-2',
+    wide: true,
     items: [
       {
         name: 'Alacritty',
@@ -73,17 +80,47 @@ const categories: UsesCategory[] = [
         link: 'https://starship.rs/',
       },
       {
-        name: 'Chezmoi',
-        description: 'Dotfile manager',
-        icon: 'tabler:settings-share',
-        link: 'https://chezmoi.io/',
+        name: 'Zoxide',
+        description: 'Smart directory jumping',
+        icon: 'tabler:folder-bolt',
+        link: 'https://github.com/ajeetdsouza/zoxide',
+      },
+      {
+        name: 'Atuin',
+        description: 'Magical shell history',
+        icon: 'tabler:history',
+        link: 'https://atuin.sh/',
+      },
+    ],
+  },
+  {
+    title: 'Languages & Runtimes',
+    icon: 'tabler:binary-tree',
+    items: [
+      {
+        name: 'Go',
+        description: 'Systems and backend services',
+        icon: 'logos:go',
+        link: 'https://go.dev/',
+      },
+      {
+        name: 'Node.js / Bun',
+        description: 'JavaScript runtimes',
+        icon: 'logos:nodejs-icon',
+        link: 'https://nodejs.org/',
+      },
+      {
+        name: 'Python',
+        description: 'Scripting with uv for packages',
+        icon: 'logos:python',
+        link: 'https://www.python.org/',
       },
     ],
   },
   {
     title: 'Dev Tools',
     icon: 'tabler:tool',
-    span: 'wide',
+    wide: true,
     items: [
       {
         name: 'mise',
@@ -92,16 +129,34 @@ const categories: UsesCategory[] = [
         link: 'https://mise.jdx.dev/',
       },
       {
+        name: 'Git',
+        description: 'Version control',
+        icon: 'logos:git-icon',
+        link: 'https://git-scm.com/',
+      },
+      {
+        name: 'GitHub CLI',
+        description: 'GitHub from the terminal',
+        icon: 'logos:github-icon',
+        link: 'https://cli.github.com/',
+      },
+      {
+        name: 'Jujutsu',
+        description: 'Modern VCS built on Git',
+        icon: 'tabler:git-branch',
+        link: 'https://github.com/martinvonz/jj',
+      },
+      {
         name: 'Docker',
         description: 'Containerization',
         icon: 'logos:docker-icon',
         link: 'https://www.docker.com/',
       },
       {
-        name: 'Git',
-        description: 'Version control',
-        icon: 'logos:git-icon',
-        link: 'https://git-scm.com/',
+        name: 'Dagger',
+        description: 'Programmable CI/CD pipelines',
+        icon: 'tabler:container',
+        link: 'https://dagger.io/',
       },
       {
         name: 'Claude Code',
@@ -109,12 +164,17 @@ const categories: UsesCategory[] = [
         icon: 'logos:claude-icon',
         link: 'https://claude.ai/code',
       },
+      {
+        name: 'Chezmoi',
+        description: 'Dotfile manager',
+        icon: 'tabler:settings-share',
+        link: 'https://chezmoi.io/',
+      },
     ],
   },
   {
     title: 'This Site',
     icon: 'tabler:world',
-    span: 'wide',
     items: [
       {
         name: 'Astro',
@@ -143,6 +203,30 @@ const categories: UsesCategory[] = [
     ],
   },
   {
+    title: 'Desktop Apps',
+    icon: 'tabler:apps',
+    items: [
+      {
+        name: 'Bitwarden',
+        description: 'Password manager',
+        icon: 'simple-icons:bitwarden',
+        link: 'https://bitwarden.com/',
+      },
+      {
+        name: 'Discord',
+        description: 'Communication & communities',
+        icon: 'logos:discord-icon',
+        link: 'https://discord.com/',
+      },
+      {
+        name: 'VLC',
+        description: 'Media player',
+        icon: 'simple-icons:vlcmediaplayer',
+        link: 'https://www.videolan.org/',
+      },
+    ],
+  },
+  {
     title: 'Hardware',
     icon: 'tabler:device-desktop',
     items: [
@@ -166,19 +250,6 @@ const categories: UsesCategory[] = [
     ],
   },
 ];
-
-function getSpanClasses(span?: 'wide' | 'tall' | 'large'): string {
-  switch (span) {
-    case 'wide':
-      return 'md:col-span-2';
-    case 'tall':
-      return 'md:row-span-2';
-    case 'large':
-      return 'md:col-span-2 md:row-span-2';
-    default:
-      return '';
-  }
-}
 ---
 
 <!doctype html>
@@ -201,7 +272,7 @@ function getSpanClasses(span?: 'wide' | 'tall' | 'large'): string {
         {
           categories.map((category, index) => (
             <div
-              class={`card bg-base-100 animate-on-scroll ${getSpanClasses(category.span)}`}
+              class={`card bg-base-100 animate-on-scroll ${category.wide ? 'md:col-span-2' : ''}`}
               style={`--delay: ${index * 100}ms`}
             >
               <div class="card-body">
@@ -209,7 +280,7 @@ function getSpanClasses(span?: 'wide' | 'tall' | 'large'): string {
                   <Icon name={category.icon} class="w-6 h-6 text-primary" aria-hidden="true" />
                   {category.title}
                 </h2>
-                <ul class="space-y-4 mt-4">
+                <ul class={category.wide ? 'grid md:grid-cols-2 gap-x-6 gap-y-4 mt-4' : 'space-y-4 mt-4'}>
                   {category.items.map((item) => (
                     <li class="flex items-start gap-3 group/item">
                       {item.icon && (

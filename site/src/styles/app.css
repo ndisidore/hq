@@ -137,6 +137,8 @@ html {
 /* Code blocks */
 .prose pre {
   background-color: var(--color-base-200);
+  border: 2px solid var(--color-neutral);
+  box-shadow: 4px 4px 0 0 var(--color-neutral);
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
@@ -144,6 +146,7 @@ html {
 
 .prose :not(pre) > code {
   background-color: var(--color-base-200);
+  border: 1px solid var(--color-neutral);
   padding: 0.125rem 0.375rem;
   border-radius: 0.25rem;
   font-size: 0.875em;
@@ -229,20 +232,102 @@ html[data-theme="dracula"] .shiki span {
   max-width: 100%;
 }
 
-/* Card hover effects */
-.card {
+/* ============================================
+   Neobrutalism Global Overrides
+   Applies to all DaisyUI themes
+   ============================================ */
+
+/* Buttons */
+.btn {
+  border: 2px solid currentColor;
+  box-shadow: 4px 4px 0 0 currentColor;
   transition:
-    transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 currentColor;
+}
+
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* Cards */
+.card {
+  border: 2px solid var(--color-base-content);
+  box-shadow: 4px 4px 0 0 var(--color-base-content);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--color-base-content);
 }
 
-/* Override DaisyUI badge to use subtle rounding instead of pill shape */
+/* Badges */
 .badge {
+  border: 2px solid currentColor;
   border-radius: 0.375rem; /* rounded-md */
+}
+
+/* Form inputs */
+.input,
+.textarea,
+.select {
+  border: 2px solid var(--color-base-content);
+  transition: box-shadow 0.15s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  box-shadow: 4px 4px 0 0 var(--color-primary);
+}
+
+/* Dropdowns */
+.dropdown-content {
+  border: 2px solid var(--color-base-content);
+  box-shadow: 4px 4px 0 0 var(--color-base-content);
+}
+
+/* Table of Contents menu */
+.toc .menu {
+  border: 2px solid var(--color-base-content);
+  box-shadow: 4px 4px 0 0 var(--color-base-content);
+  border-radius: 0.5rem;
+}
+
+/* Navbar */
+.navbar {
+  border-bottom: 2px solid var(--color-base-content);
+}
+
+/* Navbar menu items */
+.navbar .menu-horizontal > li > a,
+.navbar .menu-horizontal > li > [role="button"] {
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.navbar .menu-horizontal > li > a:hover,
+.navbar .menu-horizontal > li > [role="button"]:hover {
+  border-color: var(--color-base-content);
+  box-shadow: 2px 2px 0 0 var(--color-base-content);
+}
+
+.navbar .menu-horizontal > li > a.menu-active {
+  border-color: var(--color-base-content);
+  box-shadow: 3px 3px 0 0 var(--color-base-content);
 }
 
 /* Smooth page transitions */

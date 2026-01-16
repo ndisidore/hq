@@ -9,9 +9,16 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import TagList from '../components/TagList.astro';
-import { ME, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import {
+  HERO_TAGLINE,
+  ME,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SOCIAL_LINKS,
+} from '../consts';
 
 const recentPosts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4);
 ---
@@ -45,8 +52,7 @@ const recentPosts = (await getCollection('blog'))
           <div class="max-w-2xl text-center lg:text-left">
             <h1 class="text-4xl md:text-5xl font-bold">Hi, I'm {ME}</h1>
             <p class="py-6 text-lg text-base-content/80">
-              A brief introduction about yourself. What you do, what you're passionate about, and
-              what visitors can expect to find on your site.
+              {HERO_TAGLINE}
             </p>
 
             <!-- Social Links -->

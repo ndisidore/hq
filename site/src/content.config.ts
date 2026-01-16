@@ -30,7 +30,17 @@ const blog = defineCollection({
       heroImage: image().optional(),
       // Tags for categorization
       tags: z.array(z.string()).default([]),
+      // Draft posts are hidden from production
+      draft: z.boolean().default(false),
     }),
+});
+
+const about = defineCollection({
+  loader: glob({ base: './src/content/about', pattern: '*.mdx' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
 });
 
 // Role schema for grouped experiences (e.g., multiple roles at one company)
@@ -74,4 +84,4 @@ const experience = defineCollection({
     ),
 });
 
-export const collections = { blog, experience, principles };
+export const collections = { about, blog, experience, principles };

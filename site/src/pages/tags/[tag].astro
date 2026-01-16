@@ -9,7 +9,9 @@ import { SITE_TITLE } from '../../consts';
 import { getAllTags, getPostsByTag } from '../../utils/tags';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = (await getCollection('blog')).filter(
+    (post) => !post.data.draft,
+  );
   const tags = getAllTags(posts);
 
   return tags.map((tag) => ({

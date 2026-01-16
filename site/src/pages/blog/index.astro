@@ -10,9 +10,9 @@ import TagList from '../../components/TagList.astro';
 import { SITE_TITLE } from '../../consts';
 import { getTagCounts } from '../../utils/tags';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const tagCounts = getTagCounts(posts);
 const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]);

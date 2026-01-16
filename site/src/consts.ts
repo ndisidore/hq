@@ -14,6 +14,12 @@ export const SOCIAL_LINKS = {
   linkedin: 'https://linkedin.com/in/ndisidore',
 };
 
+export const HERO_TAGLINE =
+  'I build distributed systems, edge infrastructure, and developer tools. ' +
+  'Currently a founding engineer at Terminal Industries working on computer vision and logistics. ' +
+  'Previously at Cloudflare on the Workers platform and observability systems. ' +
+  'I write about the craft of building software and the tools that make it better.';
+
 // DaisyUI themes - keep in sync with app.css @plugin "daisyui" config
 export const THEMES = [
   { name: 'light', label: 'Light', icon: 'tabler:sun' },

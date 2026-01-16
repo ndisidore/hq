@@ -1,51 +1,32 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE } from '../consts';
+
+const aboutEntries = await getCollection('about');
+if (aboutEntries.length === 0) {
+  throw new Error(
+    "No entries found in 'about' collection. Ensure src/content/about/ contains at least one .mdx file.",
+  );
+}
+const about = aboutEntries[0];
+const { title, description } = about.data;
+const { Content } = await render(about);
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={`About | ${SITE_TITLE}`} description="Learn more about me" />
+    <BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
     <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
-      <h1 class="text-4xl font-bold mb-8">About Me</h1>
-
+      <h1 class="text-4xl font-bold mb-8">{title}</h1>
       <div class="prose prose-lg max-w-none">
-        <p>
-          Write your personal introduction here. Talk about your background, interests, and what
-          you're passionate about.
-        </p>
-
-        <h2>What I Do</h2>
-        <p>
-          Describe your professional work and areas of expertise. Share what drives you and what
-          problems you enjoy solving.
-        </p>
-
-        <h2>Interests</h2>
-        <p>
-          Share your personal interests and hobbies outside of work. This helps visitors connect
-          with you on a personal level.
-        </p>
-
-        <h2>This Site</h2>
-        <p>
-          This site is built with <a href="https://astro.build">Astro</a>, styled with
-          <a href="https://tailwindcss.com">Tailwind CSS</a> and
-          <a href="https://daisyui.com">DaisyUI</a>, and hosted on
-          <a href="https://workers.cloudflare.com">Cloudflare Workers</a>.
-        </p>
-
-        <h2>Contact</h2>
-        <p>
-          Feel free to reach out to me on social media or via email. I'm always happy to chat about
-          technology, projects, or potential collaborations.
-        </p>
+        <Content />
       </div>
     </main>
     <Footer />

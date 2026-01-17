@@ -234,11 +234,6 @@ pre[data-line-numbers] code .line::before {
     box-shadow 0.15s ease;
 }
 
-.card:hover {
-  transform: translate(2px, 2px);
-  box-shadow: var(--neo-shadow-hover) var(--color-base-content);
-}
-
 .card figure {
   border-radius: 0;
 }

@@ -5,9 +5,17 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "hq",
+  "account_id": "74db77f0cfe2aba2b8fa5ffb4b06c3bd",
   "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-12-25",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "routes": [
+    { "pattern": "diz.rocks/*", "zone_id": "e8dc8fdeca28d9fe0fecf68eb5659916" },
+    {
+      "pattern": "www.diz.rocks/*",
+      "zone_id": "e8dc8fdeca28d9fe0fecf68eb5659916"
+    }
+  ],
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"

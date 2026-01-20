@@ -18,7 +18,13 @@ const principles = defineCollection({
 
 const blog = defineCollection({
   // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  loader: glob({
+    base: './src/content/blog',
+    pattern: '**/*.{md,mdx}',
+    // Strip numeric prefix and extension (e.g., "001-the-first.md" -> "the-first")
+    generateId: ({ entry }) =>
+      entry.replace(/^\d{3}-/, '').replace(/\.(md|mdx)$/, ''),
+  }),
   // Type-check frontmatter using a schema
   schema: ({ image }) =>
     z.object({

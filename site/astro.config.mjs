@@ -9,7 +9,7 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://diz.rocks',
   integrations: [mdx(), sitemap(), icon()],
   adapter: cloudflare({
     platformProxy: {
@@ -18,6 +18,7 @@ export default defineConfig({
     imageService: 'cloudflare',
   }),
   vite: {
+    // @ts-expect-error - @tailwindcss/vite uses Vite 7 types, Astro uses Vite 6
     plugins: [tailwindcss()],
   },
   markdown: {

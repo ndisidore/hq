@@ -1,6 +1,7 @@
 [tools]
 node = "lts"
-"npm:markdownlint-cli" = "latest"
+"npm:markdownlint-cli" = "0.47"
+"npm:wrangler" = "4.59"
 harper-cli = "latest"
 pandoc = "latest"
 
@@ -28,3 +29,12 @@ description = "Run all linters (Biome + tsc)"
 [tasks."lint:fix"]
 run = "npm run format:fix && npm run lint:fix"
 description = "Auto-fix all lint issues"
+
+[tasks."ci:install"]
+run = "npm ci"
+description = "Install dependencies"
+
+[tasks."ci:deploy"]
+depends = ["ci:install"]
+run = "npm run deploy"
+description = "Deploy the site to Cloudflare Workers"

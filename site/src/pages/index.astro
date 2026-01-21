@@ -97,39 +97,48 @@ const recentPosts = (await getCollection('blog'))
           <a href="/blog" class="btn btn-ghost">View all posts &rarr;</a>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
+        <div class="grid md:grid-cols-2 gap-8">
           {
             recentPosts.map((post, index) => (
-              <article
-                class={`card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow animate-on-scroll ${index === 0 ? 'md:col-span-2' : ''}`}
+              <div
+                class={`card-pressable animate-on-scroll ${index === 0 ? 'md:col-span-2' : ''}`}
                 style={`--delay: ${index * 100}ms`}
               >
-                {post.data.heroImage && (
-                  <figure>
-                    <Image
-                      width={index === 0 ? 1020 : 720}
-                      height={index === 0 ? 510 : 360}
-                      src={post.data.heroImage}
-                      alt=""
-                      class="w-full object-cover"
-                    />
-                  </figure>
-                )}
-                <div class="card-body">
-                  <h3 class="card-title">
-                    <a href={`/blog/${post.id}/`} class="link link-hover">
-                      {post.data.title}
-                    </a>
-                  </h3>
-                  <p class="text-base-content/70">{post.data.description}</p>
-                  <div class="flex flex-wrap justify-between items-center mt-4 gap-4">
-                    <FormattedDate date={post.data.pubDate} />
-                    {post.data.tags && post.data.tags.length > 0 && (
-                      <TagList tags={post.data.tags.slice(0, 3)} size="sm" />
-                    )}
+                <article class="card bg-base-100">
+                  {post.data.heroImage && (
+                    <figure>
+                      <Image
+                        width={index === 0 ? 1020 : 720}
+                        height={index === 0 ? 510 : 360}
+                        src={post.data.heroImage}
+                        alt=""
+                        class="w-full object-cover"
+                      />
+                    </figure>
+                  )}
+                  <div class="card-body">
+                    <h3 class="card-title">
+                      <a href={`/blog/${post.id}/`} class="link link-hover after:absolute after:inset-0 after:content-['']">
+                        {post.data.title}
+                      </a>
+                    </h3>
+                    <p class="text-base-content/70">{post.data.description}</p>
+                    <div class="flex flex-wrap justify-between items-center mt-4 gap-4">
+                      <FormattedDate date={post.data.pubDate} />
+                      {post.data.tags && post.data.tags.length > 0 && (
+                        <div class="relative z-10">
+                          <TagList tags={post.data.tags.slice(0, 3)} size="sm" />
+                        </div>
+                      )}
+                    </div>
+                    <div class="card-actions justify-end mt-2">
+                      <span class="btn btn-primary btn-sm pointer-events-none">
+                        Read more
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              </div>
             ))
           }
         </div>

@@ -1,6 +1,7 @@
 [tools]
 node = "lts"
 "npm:markdownlint-cli" = "0.47"
+"npm:svgo" = "latest"
 "npm:wrangler" = "4.59"
 harper-cli = "latest"
 pandoc = "latest"
@@ -38,3 +39,14 @@ description = "Install dependencies"
 depends = ["ci:install"]
 run = "npm run deploy"
 description = "Deploy the site to Cloudflare Workers"
+
+[tasks."svg:optimize"]
+usage = '''
+flag "-i --input <file>" help="Input SVG file"
+flag "-o --output <file>" help="Output SVG file"
+flag "--pretty" default=#true help="Pretty print output"
+flag "--indent <n>" default="2" help="Indentation spaces"
+flag "--multipass" help="Run multiple optimization passes"
+'''
+run = 'svgo "${usage_input}" ${usage_pretty:+--pretty} --indent "${usage_indent}" ${usage_multipass:+--multipass} -o "${usage_output}"'
+description = "Optimize an SVG file"

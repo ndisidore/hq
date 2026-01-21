@@ -117,22 +117,22 @@ const recentPosts = (await getCollection('blog'))
                     </figure>
                   )}
                   <div class="card-body">
-                    <h3 class="card-title">
-                      <a href={`/blog/${post.id}/`} class="link link-hover after:absolute after:inset-0 after:content-['']">
-                        {post.data.title}
-                      </a>
-                    </h3>
-                    <p class="text-base-content/70">{post.data.description}</p>
-                    <div class="flex flex-wrap justify-between items-center mt-4 gap-4">
+                    <div class="flex flex-wrap justify-between items-start gap-4">
+                      <h3 class="card-title">
+                        <a href={`/blog/${post.id}/`} class="link link-hover after:absolute after:inset-0 after:content-['']">
+                          {post.data.title}
+                        </a>
+                      </h3>
                       <FormattedDate date={post.data.pubDate} />
+                    </div>
+                    <p class="text-base-content/70">{post.data.description}</p>
+                    <div class="flex flex-wrap justify-between items-center mt-auto pt-4 gap-4">
                       {post.data.tags && post.data.tags.length > 0 && (
                         <div class="relative z-10">
                           <TagList tags={post.data.tags.slice(0, 3)} size="sm" />
                         </div>
                       )}
-                    </div>
-                    <div class="card-actions justify-end mt-2">
-                      <span class="btn btn-primary btn-sm pointer-events-none">
+                      <span class="btn btn-primary pointer-events-none ml-auto">
                         Read more
                       </span>
                     </div>

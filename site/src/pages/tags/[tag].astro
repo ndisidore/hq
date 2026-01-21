@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -38,7 +39,7 @@ const { posts } = Astro.props;
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
-    <main class="container mx-auto px-4 py-8 max-w-4xl flex-1">
+    <main class="container mx-auto px-4 py-8 max-w-6xl flex-1">
       <nav class="breadcrumbs text-sm mb-6">
         <ul>
           <li><a href="/">Home</a></li>
@@ -51,30 +52,45 @@ const { posts } = Astro.props;
         Posts tagged <span class="badge badge-primary badge-lg">{tag}</span>
       </h1>
 
-      <div class="space-y-6">
+      <div class="grid gap-8">
         {
           posts.map((post) => (
-            <article class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
-              <div class="card-body">
-                <h2 class="card-title">
-                  <a href={`/blog/${post.id}/`} class="link link-hover">
-                    {post.data.title}
-                  </a>
-                </h2>
-                <p class="text-base-content/70">{post.data.description}</p>
-                <div class="flex flex-wrap justify-between items-center gap-4 mt-2">
-                  <FormattedDate date={post.data.pubDate} />
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <TagList tags={post.data.tags} size="sm" />
-                  )}
+            <div class="card-pressable">
+              <article class={`card bg-base-100 ${post.data.heroImage ? 'lg:card-side' : ''}`}>
+                {post.data.heroImage && (
+                  <figure class="lg:w-1/4 shrink-0 lg:max-h-48">
+                    <Image
+                      width={720}
+                      height={270}
+                      src={post.data.heroImage}
+                      alt={`Hero image for ${post.data.title}`}
+                      class="h-full w-full object-cover"
+                    />
+                  </figure>
+                )}
+                <div class={`card-body ${post.data.heroImage ? 'lg:w-3/4' : ''}`}>
+                  <div class="flex flex-wrap justify-between items-start gap-4">
+                    <h2 class="card-title text-2xl">
+                      <a href={`/blog/${post.id}/`} class="link link-hover after:absolute after:inset-0 after:content-['']">
+                        {post.data.title}
+                      </a>
+                    </h2>
+                    <FormattedDate date={post.data.pubDate} />
+                  </div>
+                  <p class="text-base-content/70">{post.data.description}</p>
+                  <div class="flex flex-wrap justify-between items-center mt-auto pt-4 gap-4">
+                    {post.data.tags && post.data.tags.length > 0 && (
+                      <div class="relative z-10">
+                        <TagList tags={post.data.tags} size="sm" />
+                      </div>
+                    )}
+                    <span class="btn btn-primary pointer-events-none ml-auto">
+                      Read more
+                    </span>
+                  </div>
                 </div>
-                <div class="card-actions justify-end mt-2">
-                  <a href={`/blog/${post.id}/`} class="btn btn-primary btn-sm">
-                    Read more
-                  </a>
-                </div>
-              </div>
-            </article>
+              </article>
+            </div>
           ))
         }
       </div>

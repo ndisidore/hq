@@ -3,7 +3,7 @@ import "package://github.com/jdx/hk/releases/download/v1.29.0/hk@1.29.0#/Builtin
 
 local linters = new Mapping<String, Step> {
     ["biome"] {
-        glob = List("site/**/*.js", "site/**/*.ts", "site/**/*.tsx", "site/**/*.astro", "site/**/*.json")
+        glob = List("site/**/*.js", "site/**/*.ts", "site/**/*.tsx", "site/**/*.astro", "site/**/*.json", "!site/**/package-lock.json")
         check = "mise //site:lint:biome -- $(echo '{{files}}' | sed 's|site/||g')"
         fix = "mise //site:lint:biome:fix -- $(echo '{{files}}' | sed 's|site/||g')"
     }

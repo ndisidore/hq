@@ -58,9 +58,11 @@
   --neutral-6: color-mix(in oklch, var(--color-neutral) 6%, transparent);
 
   /* Neobrutalism design tokens */
-  --neo-shadow: 4px 4px 0 0;
+  --neo-offset: 4px;
+  --neo-shadow: var(--neo-offset) var(--neo-offset) 0 0;
   --neo-shadow-sm: 3px 3px 0 0;
-  --neo-shadow-hover: 2px 2px 0 0;
+  --neo-shadow-hover:
+    calc(var(--neo-offset) / 2) calc(var(--neo-offset) / 2) 0, 0;
   --neo-border: 2px solid;
 }
 
@@ -215,12 +217,15 @@ pre[data-line-numbers] code .line::before {
 }
 
 .btn:hover {
-  transform: translate(2px, 2px);
+  transform: translate(
+    calc(var(--neo-offset) / 2),
+    calc(var(--neo-offset) / 2)
+  );
   box-shadow: var(--neo-shadow-hover) currentColor;
 }
 
 .btn:active {
-  transform: translate(4px, 4px);
+  transform: translate(var(--neo-offset), var(--neo-offset));
   box-shadow: none;
 }
 
@@ -236,6 +241,42 @@ pre[data-line-numbers] code .line::before {
 
 .card figure {
   border-radius: 0;
+}
+
+/* Pressable card - static shadow that card moves into on hover */
+.card-pressable {
+  position: relative;
+}
+
+.card-pressable::before {
+  content: "";
+  position: absolute;
+  top: var(--neo-offset);
+  left: var(--neo-offset);
+  right: calc(-1 * var(--neo-offset));
+  bottom: calc(-1 * var(--neo-offset));
+  background: var(--color-base-content);
+  border-radius: var(--radius-box, 0.5rem);
+  z-index: 0;
+}
+
+.card-pressable > .card {
+  position: relative;
+  z-index: 1;
+  box-shadow: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.card-pressable:hover > .card {
+  transform: translate(
+    calc(var(--neo-offset) / 2),
+    calc(var(--neo-offset) / 2)
+  );
+}
+
+.card-pressable:active > .card {
+  transform: translate(var(--neo-offset), var(--neo-offset));
 }
 
 /* Badges */

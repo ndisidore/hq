@@ -111,7 +111,7 @@ const recentPosts = (await getCollection('blog'))
                         width={index === 0 ? 1020 : 720}
                         height={index === 0 ? 510 : 360}
                         src={post.data.heroImage}
-                        alt=""
+                        alt={`Hero image for ${post.data.title}`}
                         class="w-full object-cover"
                       />
                     </figure>

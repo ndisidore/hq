@@ -56,19 +56,19 @@ const { posts } = Astro.props;
         {
           posts.map((post) => (
             <div class="card-pressable">
-              <article class="card lg:card-side bg-base-100">
+              <article class={`card bg-base-100 ${post.data.heroImage ? 'lg:card-side' : ''}`}>
                 {post.data.heroImage && (
                   <figure class="lg:w-1/4 shrink-0 lg:max-h-48">
                     <Image
                       width={720}
                       height={270}
                       src={post.data.heroImage}
-                      alt=""
+                      alt={`Hero image for ${post.data.title}`}
                       class="h-full w-full object-cover"
                     />
                   </figure>
                 )}
-                <div class="card-body lg:w-3/4">
+                <div class={`card-body ${post.data.heroImage ? 'lg:w-3/4' : ''}`}>
                   <div class="flex flex-wrap justify-between items-start gap-4">
                     <h2 class="card-title text-2xl">
                       <a href={`/blog/${post.id}/`} class="link link-hover after:absolute after:inset-0 after:content-['']">

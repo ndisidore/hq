@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import avatar from '../assets/logos/diz-rocks-avatar.svg';
-import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import { SOCIAL_LINKS } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -65,7 +65,7 @@ const aboutItems = [
     </div>
     <a href="/" class="btn btn-ghost text-xl gap-2">
       <Image src={avatar} alt="" class="w-8 h-8" />
-      {SITE_TITLE}
+      Rock Out
     </a>
   </div>
 

@@ -1,9 +1,9 @@
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
-export const SITE_TITLE = 'Diz.Rocks';
+export const SITE_TITLE = 'Diz Rocks — Work, Play, and Occasional Brilliance';
 export const SITE_DESCRIPTION =
-  'Personal website and blog about software development, technology, and more.';
+  'A tiny rock on the web for my experiments in code, dev tools, and strange ideas that somehow ship';
 
 export const SITE_URL = 'https://diz.rocks';
 export const ME = 'Nathan Disidore';

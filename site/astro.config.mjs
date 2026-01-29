@@ -6,6 +6,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
+import remarkDirective from 'remark-directive';
+import remarkCodeFigure from './src/plugins/remark-code-figure';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,6 +24,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
+    remarkPlugins: [remarkDirective, remarkCodeFigure],
     shikiConfig: {
       themes: {
         light: 'github-light',

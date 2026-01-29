@@ -129,6 +129,59 @@ we can use 3 backticks ``` in new line and write snippet and close with 3 backti
 </html>
 ```
 
+### Code Block with Caption
+
+Use `:::caption` after a code block to add a caption with full markdown support:
+
+```js
+const response = await fetch('/api/data');
+const data = await response.json();
+```
+
+:::caption
+Uses the [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/fetch) API with **async/await** syntax.
+:::
+
+### Code Block with Filename
+
+Use `:::filename` before a code block to show the file path:
+
+:::filename
+src/utils/api.js
+:::
+
+```js
+export async function fetchData(endpoint) {
+  return fetch(endpoint).then((r) => r.json());
+}
+```
+
+### Code Block with Both
+
+Combine both for complete context:
+
+:::filename
+src/components/UserCard.astro
+:::
+
+```astro
+---
+interface Props {
+  name: string;
+  email: string;
+}
+const { name, email } = Astro.props;
+---
+<div class="card">
+  <h2>{name}</h2>
+  <p>{email}</p>
+</div>
+```
+
+:::caption
+An [Astro component](https://docs.astro.build/en/basics/astro-components/) that renders a user card with _typed props_.
+:::
+
 ## List Types
 
 ### Ordered List

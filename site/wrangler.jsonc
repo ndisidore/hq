@@ -9,6 +9,7 @@
   "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2025-12-25",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "preview_urls": true,
   "routes": [
     { "pattern": "diz.rocks/*", "zone_id": "e8dc8fdeca28d9fe0fecf68eb5659916" },
     {

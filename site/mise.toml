@@ -2,7 +2,7 @@
 node = "lts"
 "npm:markdownlint-cli" = "0.47"
 "npm:svgo" = "latest"
-"npm:wrangler" = "4.60"
+"npm:wrangler" = "4.62"
 harper-cli = "latest"
 pandoc = "latest"
 

@@ -1,7 +1,7 @@
 experimental_monorepo_root = true
 
 [tools]
-hk = "1.32.0"
+hk = "1.36.0"
 pkl = "0.30.2"
 
 [env]

@@ -94,6 +94,25 @@ const speaking = [
   },
 ];
 
+const hackathons = [
+  {
+    title: 'Bring Your Own Binary (BYOB)',
+    award: 'Winner',
+    event: 'Cloudflare × Fiberplane Hackathon',
+    date: 'October 2025',
+    description:
+      "Built a serverless MCP framework enabling arbitrary binaries to execute within Cloudflare Containers' sandboxed runtime. Utilized Cloudflare KV to store and distribute MCP tool metadata, enabling generalized tool discovery across the serverless execution environment.",
+  },
+  {
+    title: 'Cloudship',
+    award: 'Agent Track Winner',
+    event: 'AI.TX Hackathon',
+    date: 'February 2025',
+    description:
+      'Co-developed a Wails-based native desktop application bringing AI augmentation to SRE decision-making — spanning metrics analysis, incident triage, log exploration, and cost optimization. Leveraged WebSockets with LangChain to facilitate real-time, human-in-the-loop interactions within AI-driven workflows.',
+  },
+];
+
 const skills = {
   Languages: ['Golang', 'Python', 'Rust', 'TypeScript', 'C/C++', 'Ruby'],
   'Web & Frontend': ['React', 'Node.js', 'GraphQL', 'TanStack', 'Redux'],
@@ -256,6 +275,35 @@ const expertise = [
                     <time class="font-mono italic text-base-content/70">{talk.date}</time>
                   </div>
                   <p class="mt-2 text-base-content/80">{talk.description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Hackathons Section -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+          <Icon name="tabler:trophy" class="h-6 w-6" />
+          Hackathons & Competitions
+        </h2>
+
+        <div class="space-y-6">
+          {
+            hackathons.map((hack) => (
+              <div class="card bg-base-200">
+                <div class="card-body">
+                  <div class="flex items-start justify-between gap-4">
+                    <h3 class="card-title text-lg">{hack.title}</h3>
+                    <span class="badge badge-primary shrink-0">{hack.award}</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                    <span class="text-secondary font-semibold">{hack.event}</span>
+                    <span class="text-base-content/60">|</span>
+                    <time class="font-mono italic text-base-content/70">{hack.date}</time>
+                  </div>
+                  <p class="mt-2 text-base-content/80">{hack.description}</p>
                 </div>
               </div>
             ))
